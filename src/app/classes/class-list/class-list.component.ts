@@ -16,25 +16,34 @@ export class ClassListComponent implements OnInit {
   errorMessage: string;
   admin: boolean;
 
-@Input() classes: ClassModel[];
-@Input() showRegButtons: boolean;
+  @Input() classes: ClassModel[];
+  @Input() showRegButtons: boolean;
 
   constructor(private classService: ClassService) { }
 
   ngOnInit(): void {
-     // Let's not display classes that don't yet have enough real data
-     this.weedOut();
-  }
+    this.classService.getClasses().subscribe(
+      data => {
+        console.log('Got data back from classService', data);
+        this.classes = data;
+        this.weedOut();
+      },
+      error => console.log(error),
+      () => console.log('back from getting classes in init of cL-Comp')
+    );
 
+  }
+    // Let's not display classes that don't yet have enough real data
   weedOut(): void {
-    for (let i = 0; i < this.classes.length; i++) {
-      if ((!this.classes[i].start) ) {
-        this.classes.splice(i, 1);
+    console.log('weeding out');
+    this.classes.forEach((thisClass, index) => {
+      if ((!thisClass.start)) {
+        this.classes.splice(index, 1);
       }
-    }
+    });
   }
   private getIndexOfClass = (classId: string) => {
-    return this.classes.findIndex( (classObject ) => {
+    return this.classes.findIndex((classObject) => {
       return classObject.classId === classId;
     });
   }
@@ -46,11 +55,11 @@ export class ClassListComponent implements OnInit {
   createNewClass(): void {
     const classObject: ClassModel = {
       classId: '0', title: '', course: '', start: new Date(), end: new Date(),
-       courseObject: null, courseImageURL: '', cost: '', costBlurb: '', removeThis: false
+      courseObject: null, courseImageURL: '', cost: '', costBlurb: '', removeThis: false
     };
 
     // By default, a newly-created course will have the selected state.
-    this.selectClass( classObject );
+    this.selectClass(classObject);
   }
 
   deleteClass = (classId: string) => {
