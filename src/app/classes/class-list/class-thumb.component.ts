@@ -86,9 +86,9 @@ closeBio(event): void {
     this.showingBio = false;
 }
   createInstructorThumbnail(user): Userthumbnail {
-  //  console.log('Making thumbnail for user: ' + JSON.stringify(user));
+    console.log('Making thumbnail for user: ' + JSON.stringify(user));
     if (user) {
-    const thumbnailObj = { user, userId: user.id, online: false,
+    const thumbnailObj = { user, userId: user.userId, online: false,
         size: 80,  showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle' };
     return thumbnailObj;
     }
