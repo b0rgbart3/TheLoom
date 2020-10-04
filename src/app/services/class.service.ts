@@ -14,7 +14,6 @@ export class ClassService {
   constructor(private http: HttpClient, private globals: Globals) {
   }
 
-
   gethighestID(): number {
     this.updateIDCount();
     return this.highestID;

@@ -44,11 +44,11 @@ awspath = 'https://recloom.s3.amazonaws.com/';
 
 authenticate =       this.apiPath + 'authenticate';
 users =              this.apiPath + 'users';
-user =               this.apiPath + 'users/';
+user =               this.apiPath + 'users';
 classes =            this.apiPath + 'classes';
 class =              this.apiPath + 'classes/';
 courses =            this.apiPath + 'courses';
-course =             this.apiPath + 'courses/';
+course =             this.apiPath + 'courses';
 postcourseimages =   this.apiPath + 'courseimages';
 materials =          this.apiPath + 'materials';
 postmaterialimages = this.apiPath + 'materialimages';

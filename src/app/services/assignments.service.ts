@@ -31,25 +31,16 @@ export class AssignmentsService {
 
   getAssignmentsInClass(classID): Observable<any> {
     return this.http.get<Assignment[]>(this.globals.assignments +
-      '?classId=' + classID).do(data => data).catch(this.handleError);
+      '?classId=' + classID);
   }
 
   getAllAssignments(): Observable<any> {
-    return this.http.get<Assignment[]>(this.globals.assignments)
-      .do(data => {
-        this.assignments = data;   // STORE THE GOD DAM data in memory for fucks holy sake
-        return data;
-
-      }).catch(this.handleError);
+    return this.http.get<Assignment[]>(this.globals.assignments);
   }
   // Return the list of instructor assignments for the current user
   getAssignments(): Observable<any> {
     return this.http.get<Enrollment[]>(this.globals.assignments +
-      '?userId=' + this.userService.getCurrentUser().id)
-      .do(data => {
-        // console.log(' Returning data from the assignments service: ' + JSON.stringify(data));
-        return data;
-      }).catch(this.handleError);
+      '?userId=' + this.userService.getCurrentUser().id);
   }
 
 
@@ -63,8 +54,7 @@ export class AssignmentsService {
     // if (!this.assignments) { this.assignments = []; }
     // this.assignments.push(assignment);
 
-    return this.http.put(this.globals.assignments + '?id=' + assignment.id, assignment, { headers: myHeaders }).map(
-      () => assignment);
+    return this.http.put(this.globals.assignments + '?id=' + assignment.id, assignment, { headers: myHeaders }) as Observable<Enrollment>;
 
   }
 
@@ -84,10 +74,10 @@ export class AssignmentsService {
   }
 
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
+  private handleError(error: HttpErrorResponse): string {
     console.log('ERROR:');
     console.log(JSON.stringify(error));
-    return Observable.of(error.message);
+    return error.message;
 
   }
 
@@ -95,7 +85,7 @@ export class AssignmentsService {
     // Loop through all the Materials to find the highest ID#
     if (this.assignments && this.assignments.length > 0) {
 
-      this.assignments.forEach( assignment => {
+      this.assignments.forEach(assignment => {
         const foundID = Number(assignment.assignmentId);
         // console.log('Found ID: ' + foundID);
         if (foundID >= this.highestID) {

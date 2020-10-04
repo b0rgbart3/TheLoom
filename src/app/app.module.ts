@@ -11,15 +11,21 @@ import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { ClassListComponent } from './classes/class-list/class-list.component';
 import { ClassService } from './services/class.service';
+import { CourseService } from './services/course.service';
+import { AssignmentsService } from './services/assignments.service';
+import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Globals } from './globals2';
+import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 
+import { UsersResolver } from './resolvers/users.resolver';
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     WelcomeComponent,
-    ClassListComponent
+    ClassListComponent,
+    ClassThumbComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +38,10 @@ import { Globals } from './globals2';
   ],
   providers: [
     ClassService,
+    CourseService,
+    AssignmentsService,
+    UserService,
+    UsersResolver,
     Globals
   ],
   schemas: [

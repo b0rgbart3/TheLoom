@@ -131,10 +131,7 @@ export class UserService {
     const myHeaders = new HttpHeaders();
     myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders }).do((verifiedUser) => {
-      const validatedUser = verifiedUser[0];
-      return validatedUser;
-    });
+    return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders });
   }
 
 
@@ -175,12 +172,12 @@ export class UserService {
   }
 
 
-  toggleInstructorStatus( user: User): void {
+  toggleInstructorStatus(user: User): void {
     const myHeaders = new HttpHeaders();
     myHeaders.append('Content-Type', 'application/json');
 
     user.instructor = !user.instructor;
-    this.updateUser(user).subscribe( data => {}, error => {
+    this.updateUser(user).subscribe(data => { }, error => {
       console.log('error making instructor');
     });
   }

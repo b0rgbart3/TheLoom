@@ -23,7 +23,7 @@ export class CourseService {
   }
 
   getCourse(id): Observable<Course> {
-    return this.http.get<Course>(this.globals.course + `${id}`);
+    return this.http.get<Course>(this.globals.course + `?courseId=${id}`);
   }
 
 
@@ -50,7 +50,7 @@ export class CourseService {
       return this.http.put(this.globals.courses + '?id=' + courseObject.courseId,
         courseObject, { headers: myHeaders });
     } else {
-      return Observable.of(null);
+      return null;
     }
   }
 
