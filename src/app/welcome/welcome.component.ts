@@ -22,8 +22,10 @@ export class WelcomeComponent implements OnInit {
     instructorsByClass: any[];
     errorMessage: string;
 
-    constructor(private router: Router,
-                private activatedRoute: ActivatedRoute) {
+    constructor(private router: Router
+        // ,
+        //         private activatedRoute: ActivatedRoute
+                ) {
 
     }
 
@@ -36,17 +38,17 @@ export class WelcomeComponent implements OnInit {
       //  this.currentUser = this.userService.getCurrentUser();
         console.log('In Welcome, currentUser: ' + JSON.stringify(this.currentUser));
        // this.classes = [];
-        this.activatedRoute.data.subscribe(
-            data => {
-                //   console.log('got data: ' + JSON.stringify(data));
-                this.grabData();
-            }, err => {
-                // console.log('error retrieving data');
-            }, () => {
-                // console.log('Data finished: ');
-                this.grabData();
-            }
-        );
+        // this.activatedRoute.data.subscribe(
+        //     data => {
+        //         //   console.log('got data: ' + JSON.stringify(data));
+        //         this.grabData();
+        //     }, err => {
+        //         // console.log('error retrieving data');
+        //     }, () => {
+        //         // console.log('Data finished: ');
+        //         this.grabData();
+        //     }
+        // );
 
     }
 
