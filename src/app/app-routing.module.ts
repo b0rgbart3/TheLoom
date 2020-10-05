@@ -38,3 +38,4 @@ export class AppRoutingModule { }
 
 
 
+// Note:  Taking off the resolvers solved the memory leak issue on Heroku deployment.
