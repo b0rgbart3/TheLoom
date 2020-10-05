@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "loomRebuild": {
+    "loom-rebuild": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/loomRebuild",
+            "outputPath": "dist/loom-rebuild",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -66,18 +66,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "loomRebuild:build"
+            "browserTarget": "loom-rebuild:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "loomRebuild:build:production"
+              "browserTarget": "loom-rebuild:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "loomRebuild:build"
+            "browserTarget": "loom-rebuild:build"
           }
         },
         "test": {
@@ -114,18 +114,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "loomRebuild:serve"
+            "devServerTarget": "loom-rebuild:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "loomRebuild:serve:production"
+              "devServerTarget": "loom-rebuild:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "loomRebuild",
+  "defaultProject": "loom-rebuild",
   "cli": {
     "analytics": false
   }
