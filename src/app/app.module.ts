@@ -21,8 +21,8 @@ import { ClassThumbComponent } from './classes/class-list/class-thumb.component'
 import { UsersResolver } from './resolvers/users.resolver';
 import { CacheInterceptor } from './resolvers/cache.interceptor';
 import { HttpCacheService } from './resolvers/cache';
-import { SharedModule } from './shared/shared.module';
-
+// import { SharedModule } from './shared/shared.module';
+import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 
 
 @NgModule({
@@ -32,6 +32,7 @@ import { SharedModule } from './shared/shared.module';
     WelcomeComponent,
     ClassListComponent,
     ClassThumbComponent,
+    UserThumbComponent
   ],
   imports: [
     CommonModule,

@@ -28,6 +28,7 @@ export class UserThumbComponent implements OnInit {
 
     ngOnInit(): void {
 
+        console.log('initializing user thumbnail');
         if (this.thumbnail) {
             if (!this.thumbnail.user) {
 
