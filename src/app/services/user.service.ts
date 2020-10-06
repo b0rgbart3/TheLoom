@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError, pipe } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { DataError } from '../models/dataerror.model';
 import { User } from '../models/user.model';
 import { Globals } from '../globals2';
 import { Reset } from '../models/reset.model';
@@ -55,132 +57,157 @@ export class UserService {
 
   }
 
+  hasUsers(): boolean {
+    if (this.users && this.users.length > 0) {
+      return true;
+    } else {
 
-  getUsers(): Observable<User[]> {
+      this.http.get<User[]>(this.globals.users).subscribe(
+        data => this.users = data,
+        error => console.log('In getUsers of UserService: ', error),
+        () => console.log('Got users in UserService.')
+      );
+
+      return false;
+    }
+  }
+
+  grabUsers(): User[] {
+    if (this.hasUsers) { return this.users; } else {
+      return null;
+    }
+
+  }
+
+  getUsers(): Observable<User[] | DataError>{
     // console.log ('In user service, gettingUsers');
-    return this.http.get<User[]>(this.globals.users);
 
+    return this.http.get<User[]>(this.globals.users)
+      .pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+
+
+}
+
+  private handleHttpError(error: HttpErrorResponse): Observable < DataError >
+{
+  const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
+
+  return throwError(dataError);
+
+}
+
+getUser(id): Observable < User > {
+  return this.http.get<User>(this.globals.user + `${id}`);
+}
+
+isloggedin(): boolean {
+  console.log('Looking for logged in user');
+  this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  if (this.currentUser != null) {
+    console.log('found a user in current storage:', this.currentUser);
+    return true;
+  } else { console.log('no logged in user.'); return false; }
+}
+
+getCurrentUser(): User {
+  return this.currentUser;
+}
+
+login(loginObject): Observable < User > {
+
+  console.log('About to login: ');
+  return this.http.post<User>(this.globals.authenticate, loginObject, {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  });
+}
+
+isAdmin(): boolean {
+  if (this.currentUser && this.currentUser.admin) {
+    return true;
   }
+}
 
-  getUser(id): Observable<User> {
-    return this.http.get<User>(this.globals.user + `${id}`);
+
+resetPassword(resetObject: Reset): Observable < any > {
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/json');
+
+  return this.http.put(this.resetUrl, resetObject, { headers: myHeaders });
+
+}
+
+
+getUserFromMemoryById(queryId: string): User {
+  let foundUser = null;
+  if (this.hasUsers()) {
+    foundUser = this.users.find(user => user.userId === queryId);
+    console.log('found user: ', foundUser);
   }
-
-  isloggedin(): boolean {
-    console.log('Looking for logged in user');
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-    if (this.currentUser != null) {
-      console.log('found a user in current storage:', this.currentUser);
-      return true;
-    } else { console.log('no logged in user.'); return false; }
-  }
-
-  getCurrentUser(): User {
-    return this.currentUser;
-  }
-
-  login(loginObject): Observable<User> {
-
-    console.log('About to login: ');
-    return this.http.post<User>(this.globals.authenticate, loginObject, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    });
-  }
-
-  isAdmin(): boolean {
-    if (this.currentUser && this.currentUser.admin) {
-      return true;
-    }
-  }
+  return foundUser;
+}
 
 
-  resetPassword(resetObject: Reset): Observable<any> {
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/json');
+validateUser(code): Observable < any > {
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.http.put(this.resetUrl, resetObject, { headers: myHeaders });
-
-  }
-
-
-  getUserFromMemoryById(queryID: string): User {
-
-    // console.log('In getUserFromMemory: user: ' + queryID);
-
-    let foundUser = null;
-    if (this.users) {
-      foundUser = this.users.find((user: User): boolean => user.id === queryID);
-    } else {
-      //  console.log('No users in memory.');
-    }
-    //  console.log('done filtering for user.');
-
-    if (foundUser) {
-      // console.log('found user: ' + JSON.stringify(foundUser));
-    } else {
-      //  console.log('USERS: ' + JSON.stringify(this.users));
-    }
-    return foundUser;
-  }
+  return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders });
+}
 
 
-  validateUser(code): Observable<any> {
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+updateUser(userObject: User): Observable < any > {
+  // console.log('Made it to the updateUser method.');
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/json');
+  const body = JSON.stringify(userObject);
+  return this.http.put(this.globals.users + '?id=' + userObject.id, userObject, { headers: myHeaders });
+}
 
-    return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders });
-  }
+deleteUser(userId: number): Observable < any > {
+  return this.http.delete(this.globals.users + '?id=' + userId);
+}
 
+getAllInstructors(): Observable < User[] > {
+  return this.http.get<User[]>(this.globals.users + '?instructor=true');
+}
 
-  updateUser(userObject: User): Observable<any> {
-    // console.log('Made it to the updateUser method.');
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/json');
-    const body = JSON.stringify(userObject);
-    return this.http.put(this.globals.users + '?id=' + userObject.id, userObject, { headers: myHeaders });
-  }
+unsuspendUser(user: User): void {
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/json');
 
-  deleteUser(userId: number): Observable<any> {
-    return this.http.delete(this.globals.users + '?id=' + userId);
-  }
+  user.suspended = false;
 
-  getAllInstructors(): Observable<User[]> {
-    return this.http.get<User[]>(this.globals.users + '?instructor=true');
-  }
+  this.updateUser(user).subscribe(
+    (data: any) => console.log('unsuspended user'), (err: any) => console.log('error suspending user.'));
+}
 
-  unsuspendUser(user: User): void {
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/json');
+suspendUser(user: User): void {
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/json');
 
-    user.suspended = false;
+  user.suspended = true;
 
-    this.updateUser(user).subscribe(
-      (data: any) => console.log('unsuspended user'), (err: any) => console.log('error suspending user.'));
-  }
-
-  suspendUser(user: User): void {
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/json');
-
-    user.suspended = true;
-
-    this.updateUser(user).subscribe(
-      (data: any) => console.log('suspended user'), (err: any) => console.log('error suspending user.'));
-  }
+  this.updateUser(user).subscribe(
+    (data: any) => console.log('suspended user'), (err: any) => console.log('error suspending user.'));
+}
 
 
-  toggleInstructorStatus(user: User): void {
-    const myHeaders = new HttpHeaders();
-    myHeaders.append('Content-Type', 'application/json');
+toggleInstructorStatus(user: User): void {
+  const myHeaders = new HttpHeaders();
+  myHeaders.append('Content-Type', 'application/json');
 
-    user.instructor = !user.instructor;
-    this.updateUser(user).subscribe(data => { }, error => {
-      console.log('error making instructor');
-    });
-  }
+  user.instructor = !user.instructor;
+  this.updateUser(user).subscribe(data => { }, error => {
+    console.log('error making instructor');
+  });
+}
+
+
   // this.logout();
   // const myHeaders = new HttpHeaders();
   // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');

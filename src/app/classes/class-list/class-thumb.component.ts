@@ -44,11 +44,15 @@ bioChosen: User;
     this.showingBio = false;
     this.bioChosen = null;
     this.courseID = this.classObject.course;
-    this.assignmentsService.getAssignmentsInClass(this.classObject.id).subscribe(
-      assignments => { this.assignments = assignments;
+    // this.userService.getInstructorThumbnails();
+    console.log('initializing a class-thumb component.');
+    this.assignmentsService.getAssignmentsInClass(this.classObject.classId).subscribe(
+      assignments => { console.log('Got assignments:', assignments);
+                       this.assignments = assignments;
                        this.instructors = [];
 
                        this.assignments.forEach(assignment => {
+                          console.log('looping through assignments');
                           this.instructors.push(this.userService.getUserFromMemoryById(assignment.userId) );
                        } );
 

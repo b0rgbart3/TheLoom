@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 // import { ClassService } from '../services/class.service';
 import { Course } from '../models/course.model';
 import { Assignment } from '../models/assignment.model';
+import { UserService } from '../services/user.service';
+import { DataError } from '../models/dataerror.model';
 
 @Component({
     templateUrl: 'welcome.component.html',
@@ -16,16 +18,14 @@ import { Assignment } from '../models/assignment.model';
 export class WelcomeComponent implements OnInit {
     username;
     currentUser: User;
+    users: User[];
     classes: ClassModel[];
     courses: Course[];
     assignments: Assignment[];
     instructorsByClass: any[];
     errorMessage: string;
 
-    constructor(private router: Router
-        // ,
-        //         private activatedRoute: ActivatedRoute
-                ) {
+    constructor(private router: Router, private userService: UserService, private activatedRoute: ActivatedRoute) {
 
     }
 
@@ -35,9 +35,17 @@ export class WelcomeComponent implements OnInit {
 
     ngOnInit(): void {
         // console.log('snapshot: ' + JSON.stringify(this.activatedRoute.snapshot.data));
-      //  this.currentUser = this.userService.getCurrentUser();
+        //  this.currentUser = this.userService.getCurrentUser();
         console.log('In Welcome, currentUser: ' + JSON.stringify(this.currentUser));
-       // this.classes = [];
+        //  this.users = this.userService.grabUsers();
+        const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
+
+        if (resolvedUserData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedUserData}`);
+        } else {
+            this.users = resolvedUserData;
+        }
+        // this.classes = [];
         // this.activatedRoute.data.subscribe(
         //     data => {
         //         //   console.log('got data: ' + JSON.stringify(data));
@@ -53,27 +61,27 @@ export class WelcomeComponent implements OnInit {
     }
 
     grabData(): void {
-      //  this.courses = this.activatedRoute.snapshot.data.courses;
-      //  this.classes = this.activatedRoute.snapshot.data.classes;
+        //  this.courses = this.activatedRoute.snapshot.data.courses;
+        //  this.classes = this.activatedRoute.snapshot.data.classes;
         // console.log('Classes: ' + JSON.stringify(this.classes));
-       // this.assignments = this.activatedRoute.snapshot.data.assignments;
+        // this.assignments = this.activatedRoute.snapshot.data.assignments;
         this.loadInstructors();
     }
     loadInstructors(): void {
         this.instructorsByClass = [];
 
         // if (this.classes) {
-            // for (let i = 0; i < this.classes.length; i++) {
-            //     this.instructorsByClass[i] = [];
-            //     this.userService.getInstructorsForClass(this.classes[i].id).subscribe(data => this.instructorsByClass[i] = data,
-            //         err => console.log('error getting instructors'));
-            // }
-            // for (let i = 0; i < this.instructorsByClass.length; i++) {
-            //     // these are assignment objects
-            //     for (let j = 0; j < this.instructorsByClass[i].length; j++) {
-            //         this.instructorsByClass[i][j].user = this.userService.getUserFromMemoryById(this.instructorsByClass[i][j].userId);
-            //     }
-            // }
-      //  }
+        // for (let i = 0; i < this.classes.length; i++) {
+        //     this.instructorsByClass[i] = [];
+        //     this.userService.getInstructorsForClass(this.classes[i].id).subscribe(data => this.instructorsByClass[i] = data,
+        //         err => console.log('error getting instructors'));
+        // }
+        // for (let i = 0; i < this.instructorsByClass.length; i++) {
+        //     // these are assignment objects
+        //     for (let j = 0; j < this.instructorsByClass[i].length; j++) {
+        //         this.instructorsByClass[i][j].user = this.userService.getUserFromMemoryById(this.instructorsByClass[i][j].userId);
+        //     }
+        // }
+        //  }
     }
 }

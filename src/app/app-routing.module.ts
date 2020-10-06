@@ -12,13 +12,13 @@ import { UsersResolver } from './resolvers/users.resolver';
 const loomRoutes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
   {
-    path: '**', component: WelcomeComponent
+    path: '**', component: WelcomeComponent,
 
-  //  resolve: {
-   //   users: UsersResolver,
+    resolve: {
+      resolvedUsers: UsersResolver
       // courses: CoursesResolver,
       // classes: ClassesResolver
-  //  }
+    }
   },
 ];
 

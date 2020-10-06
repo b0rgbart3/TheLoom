@@ -34,14 +34,14 @@ export class AssignmentsService {
       '?classId=' + classID);
   }
 
-  getAllAssignments(): Observable<any> {
+  getAssignments(): Observable<any> {
     return this.http.get<Assignment[]>(this.globals.assignments);
   }
   // Return the list of instructor assignments for the current user
-  getAssignments(): Observable<any> {
-    return this.http.get<Enrollment[]>(this.globals.assignments +
-      '?userId=' + this.userService.getCurrentUser().id);
-  }
+  // getAssignment(id): Observable<any> {
+  //   return this.http.get<Assignment[]>(this.globals.assignments +
+  //     '?userId=' + this.userService.getCurrentUser().id);
+  // }
 
 
   postAssignment(assignment): Observable<Enrollment> {

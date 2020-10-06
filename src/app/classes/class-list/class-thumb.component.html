@@ -13,6 +13,7 @@
      <h2>Taught by:</h2>
      <div *ngIf='instructors && instructorThumbnails'>
      <div class='instructorIcon' *ngFor='let instructor of instructorThumbnails'  (click)='showBio(instructor.user)'>
+         <p>Teacher:</p>
          <user-thumb [thumbnail]='instructor' *ngIf='instructor'></user-thumb>
      </div>
     </div>
