@@ -23,6 +23,10 @@ export class AssignmentsService {
   constructor(private http: HttpClient, private globals: Globals, private userService: UserService) { }
 
 
+  takeInResolvedData( assignments: Assignment[]): void {
+    this.assignments = assignments;
+  }
+
   getAssignmentsNow(): void {
     this.getAssignments().subscribe(
       data => this.assignments = data,

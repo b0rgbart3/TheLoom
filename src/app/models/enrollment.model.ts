@@ -1,5 +1,5 @@
 import { User } from './user.model';
-import { ClassModel } from './class.model';
+import { ClassModel } from './classModel.model';
 
 export class Enrollment {
     id?: string;

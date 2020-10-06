@@ -18,6 +18,8 @@ export class CourseService {
 
   constructor(private http: HttpClient, private globals: Globals) {
   }
+
+
   getCourses(): Observable<Course[]> {
     return this.http.get<Course[]>(this.globals.courses);
   }
@@ -26,6 +28,20 @@ export class CourseService {
     return this.http.get<Course>(this.globals.course + `?courseId=${id}`);
   }
 
+  grabCourseById( id: string ): Course {
+    if (this.courses && this.courses.length > 0) {
+    const grabbedCourse = this.courses.filter( course => course.courseId === id);
+    if (grabbedCourse && grabbedCourse.length > 0) {
+      return grabbedCourse[0];
+    }
+    }
+  }
+
+  // The data is coming from a component that already used a route resolver to get it,
+  // so let's store it locally for heaven's sake.
+  takeInResolvedData( courses: Course[] ): void {
+    this.courses = courses;
+  }
 
   deleteCourse(courseId: string): Observable<any> {
     return this.http.delete(this.globals.courses + '?id=' + courseId);

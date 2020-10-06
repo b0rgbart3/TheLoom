@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ClassModel } from '../models/class.model';
+import { ClassModel } from '../models/classModel.model';
 import { Globals } from '../globals2';
 
 @Injectable()
@@ -13,6 +13,11 @@ export class ClassService {
   removedClasses: ClassModel[];
   constructor(private http: HttpClient, private globals: Globals) {
   }
+
+  takeInResolvedData( classes: ClassModel[]): void {
+    this.classes = classes;
+  }
+
 
   gethighestID(): number {
     this.updateIDCount();

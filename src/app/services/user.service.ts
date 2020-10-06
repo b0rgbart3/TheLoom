@@ -4,9 +4,14 @@ import { Observable, throwError, pipe } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DataError } from '../models/dataerror.model';
 import { User } from '../models/user.model';
+import { ClassModel } from '../models/classModel.model';
+import { Course } from '../models/course.model';
+import { Assignment } from '../models/assignment.model';
 import { Globals } from '../globals2';
 import { Reset } from '../models/reset.model';
 import * as io from 'socket.io-client';
+// import { Console } from 'console';
+import { Userthumbnail } from '../models/userthumbnail.model';
 
 /*   Methods in this Service
 -------------------------------------
@@ -34,6 +39,7 @@ export class UserService {
   private instructorsUrl;
   private studentsUrl;
   private avatarImageUrl;
+  instructorThumbnailsByClass: {};
   userSettingsUrl;
   // private socket: SocketIOClient.Socket;
   redirectMsg: string;
@@ -72,6 +78,10 @@ export class UserService {
     }
   }
 
+  takeInResolvedData( users: User[]): void {
+    this.users = users;
+  }
+
   grabUsers(): User[] {
     if (this.hasUsers) { return this.users; } else {
       return null;
@@ -79,7 +89,17 @@ export class UserService {
 
   }
 
-  getUsers(): Observable<User[] | DataError>{
+  grabUserById(id: string): User {
+    if (this.users && this.users.length > 0) {
+      const grabbedUser: User[] = this.users.filter(user => user.userId === id);
+      if (grabbedUser.length > 0) {
+        return grabbedUser[0];
+      }
+    }
+    return null;
+  }
+
+  getUsers(): Observable<User[] | DataError> {
     // console.log ('In user service, gettingUsers');
 
     return this.http.get<User[]>(this.globals.users)
@@ -88,124 +108,175 @@ export class UserService {
       );
 
 
-}
-
-  private handleHttpError(error: HttpErrorResponse): Observable < DataError >
-{
-  const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
-
-  return throwError(dataError);
-
-}
-
-getUser(id): Observable < User > {
-  return this.http.get<User>(this.globals.user + `${id}`);
-}
-
-isloggedin(): boolean {
-  console.log('Looking for logged in user');
-  this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-  if (this.currentUser != null) {
-    console.log('found a user in current storage:', this.currentUser);
-    return true;
-  } else { console.log('no logged in user.'); return false; }
-}
-
-getCurrentUser(): User {
-  return this.currentUser;
-}
-
-login(loginObject): Observable < User > {
-
-  console.log('About to login: ');
-  return this.http.post<User>(this.globals.authenticate, loginObject, {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-  });
-}
-
-isAdmin(): boolean {
-  if (this.currentUser && this.currentUser.admin) {
-    return true;
   }
-}
 
+  private handleHttpError(error: HttpErrorResponse): Observable<DataError> {
+    const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
 
-resetPassword(resetObject: Reset): Observable < any > {
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/json');
+    return throwError(dataError);
 
-  return this.http.put(this.resetUrl, resetObject, { headers: myHeaders });
-
-}
-
-
-getUserFromMemoryById(queryId: string): User {
-  let foundUser = null;
-  if (this.hasUsers()) {
-    foundUser = this.users.find(user => user.userId === queryId);
-    console.log('found user: ', foundUser);
   }
-  return foundUser;
-}
+
+  grabInstructorThumbnailsByClassId(classId: string): Userthumbnail[] {
+    return this.instructorThumbnailsByClass[classId];
+  }
+
+  // Organize Instructors by Class based on Assignment Data
+  // Then build an array of Instructor Thumbnails
+
+  createInstructorsDataObject(users: User[], assignments: Assignment[], classes: ClassModel[], courses: Course[]): void {
+
+    const instructorIdsByClass = {};
+
+    assignments.forEach(assignment => {
+      //  console.log('looping through assignments');
+      //  this.instructors.push(this.userService.getUserFromMemoryById(assignment.userId) );
+      if (instructorIdsByClass[assignment.classId]) {
+        instructorIdsByClass[assignment.classId].push(assignment.userId);
+      } else {
+        instructorIdsByClass[assignment.classId] = [];
+        instructorIdsByClass[assignment.classId].push(assignment.userId);
+      }
+    });
+
+    console.log('In createInstructorsDataObject method.', instructorIdsByClass);
+
+    this.instructorThumbnailsByClass = {};
+
+    for (const key of Object.keys(instructorIdsByClass)) {
+      // console.log(key, ':', value);
+      this.instructorThumbnailsByClass[key] = [];
+      instructorIdsByClass[key].forEach(userId => {
+        this.instructorThumbnailsByClass[key].push(this.createInstructorThumbnail(userId));
+      });
 
 
-validateUser(code): Observable < any > {
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+    }
 
-  return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders });
-}
+  }
+
+  createInstructorThumbnail(id: string): Userthumbnail {
+    // console.log('Making thumbnail for user: ' + JSON.stringify(userId));
+    const thisUser = this.grabUserById(id);
+
+    if (thisUser) {
+      const thumbnailObj: Userthumbnail = { user: thisUser, userId: id, online: false,
+        size: 80, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle' };
+
+      return thumbnailObj;
+
+    }
+    return null;
+
+  }
+  getUser(id): Observable<User> {
+    return this.http.get<User>(this.globals.user + `${id}`);
+  }
+
+  isloggedin(): boolean {
+    console.log('Looking for logged in user');
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    if (this.currentUser != null) {
+      console.log('found a user in current storage:', this.currentUser);
+      return true;
+    } else { console.log('no logged in user.'); return false; }
+  }
+
+  getCurrentUser(): User {
+    return this.currentUser;
+  }
+
+  login(loginObject): Observable<User> {
+
+    console.log('About to login: ');
+    return this.http.post<User>(this.globals.authenticate, loginObject, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  isAdmin(): boolean {
+    if (this.currentUser && this.currentUser.admin) {
+      return true;
+    }
+  }
 
 
-updateUser(userObject: User): Observable < any > {
-  // console.log('Made it to the updateUser method.');
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/json');
-  const body = JSON.stringify(userObject);
-  return this.http.put(this.globals.users + '?id=' + userObject.id, userObject, { headers: myHeaders });
-}
+  resetPassword(resetObject: Reset): Observable<any> {
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
 
-deleteUser(userId: number): Observable < any > {
-  return this.http.delete(this.globals.users + '?id=' + userId);
-}
+    return this.http.put(this.resetUrl, resetObject, { headers: myHeaders });
 
-getAllInstructors(): Observable < User[] > {
-  return this.http.get<User[]>(this.globals.users + '?instructor=true');
-}
-
-unsuspendUser(user: User): void {
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/json');
-
-  user.suspended = false;
-
-  this.updateUser(user).subscribe(
-    (data: any) => console.log('unsuspended user'), (err: any) => console.log('error suspending user.'));
-}
-
-suspendUser(user: User): void {
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/json');
-
-  user.suspended = true;
-
-  this.updateUser(user).subscribe(
-    (data: any) => console.log('suspended user'), (err: any) => console.log('error suspending user.'));
-}
+  }
 
 
-toggleInstructorStatus(user: User): void {
-  const myHeaders = new HttpHeaders();
-  myHeaders.append('Content-Type', 'application/json');
+  getUserFromMemoryById(queryId: string): User {
+    let foundUser = null;
+    if (this.hasUsers()) {
+      foundUser = this.users.find(user => user.userId === queryId);
+      console.log('found user: ', foundUser);
+    }
+    return foundUser;
+  }
 
-  user.instructor = !user.instructor;
-  this.updateUser(user).subscribe(data => { }, error => {
-    console.log('error making instructor');
-  });
-}
+
+  validateUser(code): Observable<any> {
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this.http.get(this.basePath + '/api/users?verificationID=' + code, { headers: myHeaders });
+  }
+
+
+  updateUser(userObject: User): Observable<any> {
+    // console.log('Made it to the updateUser method.');
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
+    const body = JSON.stringify(userObject);
+    return this.http.put(this.globals.users + '?id=' + userObject.id, userObject, { headers: myHeaders });
+  }
+
+  deleteUser(userId: number): Observable<any> {
+    return this.http.delete(this.globals.users + '?id=' + userId);
+  }
+
+  getAllInstructors(): Observable<User[]> {
+    return this.http.get<User[]>(this.globals.users + '?instructor=true');
+  }
+
+  unsuspendUser(user: User): void {
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
+
+    user.suspended = false;
+
+    this.updateUser(user).subscribe(
+      (data: any) => console.log('unsuspended user'), (err: any) => console.log('error suspending user.'));
+  }
+
+  suspendUser(user: User): void {
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
+
+    user.suspended = true;
+
+    this.updateUser(user).subscribe(
+      (data: any) => console.log('suspended user'), (err: any) => console.log('error suspending user.'));
+  }
+
+
+  toggleInstructorStatus(user: User): void {
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
+
+    user.instructor = !user.instructor;
+    this.updateUser(user).subscribe(data => { }, error => {
+      console.log('error making instructor');
+    });
+  }
 
 
   // this.logout();

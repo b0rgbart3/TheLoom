@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
-import { ClassModel } from '../models/class.model';
+import { ClassModel } from '../models/classModel.model';
 import { CommonModule } from '@angular/common';
 // import { UserService } from '../services/user.service';
 // import { ClassService } from '../services/class.service';
 import { Course } from '../models/course.model';
 import { Assignment } from '../models/assignment.model';
 import { UserService } from '../services/user.service';
+import { ClassService } from '../services/class.service';
+import { CourseService } from '../services/course.service';
+import { AssignmentsService } from '../services/assignments.service';
+
 import { DataError } from '../models/dataerror.model';
 
 @Component({
@@ -25,7 +29,13 @@ export class WelcomeComponent implements OnInit {
     instructorsByClass: any[];
     errorMessage: string;
 
-    constructor(private router: Router, private userService: UserService, private activatedRoute: ActivatedRoute) {
+    constructor(
+        private router: Router,
+        private userService: UserService,
+        private classService: ClassService,
+        private courseService: CourseService,
+        private assignmentsService: AssignmentsService,
+        private activatedRoute: ActivatedRoute) {
 
     }
 
@@ -34,16 +44,47 @@ export class WelcomeComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // console.log('snapshot: ' + JSON.stringify(this.activatedRoute.snapshot.data));
-        //  this.currentUser = this.userService.getCurrentUser();
+
         console.log('In Welcome, currentUser: ' + JSON.stringify(this.currentUser));
         //  this.users = this.userService.grabUsers();
         const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
+        const resolvedClassData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
+        const resolvedCourseData: Course[] | DataError = this.activatedRoute.snapshot.data[`resolvedCourses`];
+        const resolvedAssignmentData: Assignment[] | DataError = this.activatedRoute.snapshot.data[`resolvedAssignments`];
 
+        let dataError = false;
         if (resolvedUserData instanceof DataError) {
             console.log(`Data loading error: ${resolvedUserData}`);
+            dataError = true;
         } else {
             this.users = resolvedUserData;
+            this.userService.takeInResolvedData(this.users);
+        }
+        if (resolvedCourseData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedCourseData}`);
+            dataError = true;
+        } else {
+            this.courses = resolvedCourseData;
+            this.courseService.takeInResolvedData(this.courses);
+        }
+        if (resolvedClassData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedClassData}`);
+            dataError = true;
+        } else {
+            this.classes = resolvedClassData;
+            this.classService.takeInResolvedData(this.classes);
+        }
+        if (resolvedAssignmentData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedAssignmentData}`);
+            dataError = true;
+        } else {
+            this.assignments = resolvedAssignmentData;
+            this.assignmentsService.takeInResolvedData(this.assignments);
+        }
+
+        if (!dataError) {
+            console.log('Got all the data.');
+            this.userService.createInstructorsDataObject(this.users, this.assignments, this.classes, this.courses);
         }
         // this.classes = [];
         // this.activatedRoute.data.subscribe(

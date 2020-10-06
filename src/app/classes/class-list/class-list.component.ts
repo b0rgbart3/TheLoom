@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ClassModel } from '../../models/class.model';
+import { ClassModel } from '../../models/classModel.model';
+import { Course } from '../../models/course.model';
+import { Assignment } from '../../models/assignment.model';
 import { ClassService } from '../../services/class.service';
 import { User } from '../../models/user.model';
 
@@ -17,20 +19,24 @@ export class ClassListComponent implements OnInit {
   admin: boolean;
 
   @Input() classes: ClassModel[];
+  @Input() users: User[];
+  @Input() courses: Course[];
+  @Input() assignments: Assignment[];
   @Input() showRegButtons: boolean;
 
   constructor(private classService: ClassService) { }
 
   ngOnInit(): void {
-    this.classService.getClasses().subscribe(
-      data => {
-        console.log('Got data back from classService', data);
-        this.classes = data;
-        this.weedOut();
-      },
-      error => console.log(error),
-      () => console.log('back from getting classes in init of cL-Comp')
-    );
+    console.log('In class list component:', this.classes, this.users, this.courses, this.assignments, this.showRegButtons);
+    // this.classService.getClasses().subscribe(
+    //   data => {
+    //     console.log('Got data back from classService', data);
+    //     this.classes = data;
+    //     this.weedOut();
+    //   },
+    //   error => console.log(error),
+    //   () => console.log('back from getting classes in init of cL-Comp')
+    // );
 
   }
     // Let's not display classes that don't yet have enough real data

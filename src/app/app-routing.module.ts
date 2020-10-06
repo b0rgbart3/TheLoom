@@ -5,9 +5,9 @@ import { ClassService } from '../app/services/class.service';
 import { WelcomeComponent } from '../app/welcome/welcome.component';
 // import { ClassesResolver } from './resolvers/classes-resolver.service';
 import { UsersResolver } from './resolvers/users.resolver';
-// import { UserResolver } from './resolvers/user-resolver';
-// import { CoursesResolver } from './resolvers/courses-resolver.service';
-// import { ClassResolver } from './resolvers/class-resolver.service';
+import { CoursesResolver } from './resolvers/courses.resolver';
+import { ClassesResolver } from './resolvers/classes.resolver';
+import { AssignmentsResolver } from './resolvers/assignments.resolver';
 
 const loomRoutes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
@@ -15,9 +15,10 @@ const loomRoutes: Routes = [
     path: '**', component: WelcomeComponent,
 
     resolve: {
-      resolvedUsers: UsersResolver
-      // courses: CoursesResolver,
-      // classes: ClassesResolver
+      resolvedUsers: UsersResolver,
+      resolvedCourses: CoursesResolver,
+      resolvedClasses: ClassesResolver,
+      resolvedAssignments: AssignmentsResolver
     }
   },
 ];

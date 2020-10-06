@@ -14,18 +14,24 @@ import { ClassService } from './services/class.service';
 import { CourseService } from './services/course.service';
 import { AssignmentsService } from './services/assignments.service';
 import { UserService } from './services/user.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Globals } from './globals2';
 import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 
 import { UsersResolver } from './resolvers/users.resolver';
+import { CacheInterceptor } from './resolvers/cache.interceptor';
+import { HttpCacheService } from './resolvers/cache';
+import { SharedModule } from './shared/shared.module';
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     WelcomeComponent,
     ClassListComponent,
-    ClassThumbComponent
+    ClassThumbComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +40,8 @@ import { UsersResolver } from './resolvers/users.resolver';
     BrowserAnimationsModule,
     MatMenuModule,
     MatIconModule,
-    AppRoutingModule
+    AppRoutingModule,
+
   ],
   providers: [
     ClassService,
@@ -42,7 +49,9 @@ import { UsersResolver } from './resolvers/users.resolver';
     AssignmentsService,
     UserService,
     UsersResolver,
-    Globals
+    Globals,
+    HttpCacheService,
+    { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
