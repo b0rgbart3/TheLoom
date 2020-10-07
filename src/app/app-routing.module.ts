@@ -8,8 +8,10 @@ import { UsersResolver } from './resolvers/users.resolver';
 import { CoursesResolver } from './resolvers/courses.resolver';
 import { ClassesResolver } from './resolvers/classes.resolver';
 import { AssignmentsResolver } from './resolvers/assignments.resolver';
+import { LoginComponent } from './login/login.component';
 
 const loomRoutes: Routes = [
+  { path: 'login', component: LoginComponent },
   { path: 'welcome', component: WelcomeComponent },
   {
     path: '**', component: WelcomeComponent,

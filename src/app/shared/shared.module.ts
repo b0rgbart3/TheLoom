@@ -1,26 +1,36 @@
-// import { NgModule } from '@angular/core';
-// import { CommonModule } from '@angular/common';
-// import { BrowserModule } from '@angular/platform-browser';
-// import { UserThumbComponent } from '../users/user-thumb/user-thumb.component';
-// @NgModule ( {
-//     imports: [
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
+import { ClassThumbComponent } from '../classes/class-list/class-thumb.component';
+import { UserThumbComponent } from '../users/user-thumb/user-thumb.component';
+import { ClassListComponent } from '../classes/class-list/class-list.component';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-//     ],
-//     declarations: [
-//         UserThumbComponent,
+@NgModule ( {
+    imports: [
 
-//     ],
-//     providers: [
+        FormsModule, ReactiveFormsModule
 
-//     ],
-//     exports: [
-//         UserThumbComponent
+    ],
+    declarations: [
+        ClassListComponent,
+        ClassThumbComponent,
+        UserThumbComponent
 
-//     ]
+    ],
+    providers: [
+        FormsModule, ReactiveFormsModule
+    ],
+    exports: [
+        ClassListComponent,
+        ClassThumbComponent,
+        UserThumbComponent
 
-// })
+    ]
 
-// export class SharedModule {}
+})
+
+export class SharedModule {}
 

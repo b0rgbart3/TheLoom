@@ -189,7 +189,7 @@ export class UserService {
 
   login(loginObject): Observable<User> {
 
-    console.log('About to login: ');
+    console.log('About to login: ', loginObject);
     return this.http.post<User>(this.globals.authenticate, loginObject, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'

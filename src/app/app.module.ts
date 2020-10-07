@@ -9,39 +9,43 @@ import { WelcomeComponent } from '../app/welcome/welcome.component';
 import { NavBarComponent } from '../app/navbar/nav-bar.component';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { ClassListComponent } from './classes/class-list/class-list.component';
+
 import { ClassService } from './services/class.service';
 import { CourseService } from './services/course.service';
 import { AssignmentsService } from './services/assignments.service';
 import { UserService } from './services/user.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Globals } from './globals2';
-import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
+
 
 import { UsersResolver } from './resolvers/users.resolver';
 import { CacheInterceptor } from './resolvers/cache.interceptor';
 import { HttpCacheService } from './resolvers/cache';
-// import { SharedModule } from './shared/shared.module';
-import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
-
+import { SharedModule } from './shared/shared.module';
+import { LoginComponent } from './login';
+import { ReactiveFormsModule } from '@angular/forms';
+// import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
+// import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
+// import { ClassListComponent } from './classes/class-list/class-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
     WelcomeComponent,
-    ClassListComponent,
-    ClassThumbComponent,
-    UserThumbComponent
+    LoginComponent,
+
   ],
   imports: [
     CommonModule,
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     MatMenuModule,
     MatIconModule,
     AppRoutingModule,
+    SharedModule,
 
   ],
   providers: [
