@@ -45,7 +45,8 @@ export class WelcomeComponent implements OnInit {
 
     ngOnInit(): void {
 
-        console.log('In Welcome, currentUser: ' + JSON.stringify(this.currentUser));
+        this.currentUser = this.userService.getCurrentUser();
+        console.log('In Welcome, currentUser: ', this.currentUser );
         //  this.users = this.userService.grabUsers();
         const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
         const resolvedClassData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
@@ -98,6 +99,15 @@ export class WelcomeComponent implements OnInit {
         //         this.grabData();
         //     }
         // );
+
+        // If the route didn't resolve this data, then let's load it in syncronously.
+        if (!this.classes || this.classes.length < 1) {
+            this.classService.getClasses().subscribe(
+                data => this.classes = data,
+                error => console.log('error getting class info'),
+                () => console.log('back from loading classes')
+            );
+        }
 
     }
 

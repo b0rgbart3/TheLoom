@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private globals: Globals,
     private formBuilder: FormBuilder,
     private toastr: ToastrService
-//    private alertService: AlertService
+    //    private alertService: AlertService
     // private flashMessage: FlashMessagesService
     //  private notes: LoomNotificationsService
   ) { }
@@ -112,8 +112,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     // this.loginForm.get('username').value, this.loginForm.get('password').value
     this.userService.login(this.loginForm.value)
       .subscribe(
-        (data: User) => this.currentUser = data,
-        (err: any) => this.errorMessage = err,
+        (data: User) => {
+          this.currentUser = data;
+          this.userService.setCurrentUser(this.currentUser);
+          this.toastr.success('Thanks for logging in!');
+          localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        },
+        (err: any) => {
+          this.errorMessage = err; console.log('improper creds.');
+          this.toastr.error('Oops.  Wrong credentials.   Please try again.');
+        },
         () => {
           console.log('Got all users.', this.currentUser);
           this.continue();
@@ -127,6 +135,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       const wantedURL = this.userService.redirectUrl;
       // this.userService.redirectUrl = ''; // clear it out
       //  this.userService.redirectMsg = '';
+
       this.myRouter.navigateByUrl(this.userService.redirectUrl);
     } else {
       this.myRouter.navigate(['/home']);

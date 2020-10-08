@@ -46,7 +46,13 @@ export class UserService {
   redirectUrl: string;
 
   constructor(private http: HttpClient, private globals: Globals) {
-    const thisUser = JSON.parse(localStorage.getItem('currentUser'));
+    const storedUser = localStorage.getItem('currentUser');
+    let thisUser = null;
+    if (storedUser) {
+      thisUser = JSON.parse(storedUser);
+    }
+    this.currentUser = thisUser;
+
     this.token = thisUser && thisUser.token;
     this.username = thisUser && thisUser.username;
     this.basePath = globals.basepath;
@@ -59,7 +65,7 @@ export class UserService {
     this.avatarImageUrl = this.globals.avatars;
     // this.socket = io(this.globals.basepath);
     this.usersLoaded = false;
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+   // this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   }
 
@@ -78,7 +84,17 @@ export class UserService {
     }
   }
 
-  takeInResolvedData( users: User[]): void {
+  setCurrentUser(user: User): void {
+
+    this.currentUser = user;
+  }
+
+  logout(): void {
+    this.currentUser = null;
+    localStorage.setItem('currentUser', '');
+  }
+
+  takeInResolvedData(users: User[]): void {
     this.users = users;
   }
 
@@ -128,29 +144,30 @@ export class UserService {
 
     const instructorIdsByClass = {};
 
-    assignments.forEach(assignment => {
-      //  console.log('looping through assignments');
-      //  this.instructors.push(this.userService.getUserFromMemoryById(assignment.userId) );
-      if (instructorIdsByClass[assignment.classId]) {
-        instructorIdsByClass[assignment.classId].push(assignment.userId);
-      } else {
-        instructorIdsByClass[assignment.classId] = [];
-        instructorIdsByClass[assignment.classId].push(assignment.userId);
-      }
-    });
-
-    console.log('In createInstructorsDataObject method.', instructorIdsByClass);
-
-    this.instructorThumbnailsByClass = {};
-
-    for (const key of Object.keys(instructorIdsByClass)) {
-      // console.log(key, ':', value);
-      this.instructorThumbnailsByClass[key] = [];
-      instructorIdsByClass[key].forEach(userId => {
-        this.instructorThumbnailsByClass[key].push(this.createInstructorThumbnail(userId));
+    if (assignments) {
+      assignments.forEach(assignment => {
+        //  console.log('looping through assignments');
+        //  this.instructors.push(this.userService.getUserFromMemoryById(assignment.userId) );
+        if (instructorIdsByClass[assignment.classId]) {
+          instructorIdsByClass[assignment.classId].push(assignment.userId);
+        } else {
+          instructorIdsByClass[assignment.classId] = [];
+          instructorIdsByClass[assignment.classId].push(assignment.userId);
+        }
       });
 
+      console.log('In createInstructorsDataObject method.', instructorIdsByClass);
 
+      this.instructorThumbnailsByClass = {};
+
+      for (const key of Object.keys(instructorIdsByClass)) {
+        // console.log(key, ':', value);
+        this.instructorThumbnailsByClass[key] = [];
+        instructorIdsByClass[key].forEach(userId => {
+          this.instructorThumbnailsByClass[key].push(this.createInstructorThumbnail(userId));
+        });
+
+      }
     }
 
   }
@@ -160,8 +177,10 @@ export class UserService {
     const thisUser = this.grabUserById(id);
 
     if (thisUser) {
-      const thumbnailObj: Userthumbnail = { user: thisUser, userId: id, online: false,
-        size: 80, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle' };
+      const thumbnailObj: Userthumbnail = {
+        user: thisUser, userId: id, online: false,
+        size: 80, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
+      };
 
       return thumbnailObj;
 
@@ -184,6 +203,12 @@ export class UserService {
   }
 
   getCurrentUser(): User {
+    if (!this.currentUser) {
+      const possibleUser = localStorage.getItem('currentUser');
+      if (possibleUser) {
+        this.currentUser = JSON.parse(possibleUser);
+      }
+    }
     return this.currentUser;
   }
 

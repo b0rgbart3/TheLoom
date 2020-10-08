@@ -1,15 +1,16 @@
-import {  Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { User } from '../models/user.model';
 // import { FlashMessagesService } from 'angular2-flash-messages';
 import { Router } from '@angular/router';
 // import { UserService } from '../services/user.service';
 // import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UserService } from '../services/user.service';
 
-// import { Globals } from '../globals2';
+import { Globals } from '../globals2';
 // // import * as io from 'socket.io-client';
 // // import { MessageService } from '../services/message.service';
-// import { Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 // import { Message } from '../models/message.model';
 // import { Userthumbnail } from '../models/userthumbnail.model';
 
@@ -34,20 +35,20 @@ export class NavBarComponent implements OnInit, DoCheck {
   avatarExists: boolean;
   private showAvatarMenu: boolean;
 
-//   private socket: SocketIOClient.Socket;
-   currentUser: User;
-//   messages: Message[];  // all messages for current user
-//   freshMessages: Message[];
+  //   private socket: SocketIOClient.Socket;
+  currentUser: User;
+  //   messages: Message[];  // all messages for current user
+  //   freshMessages: Message[];
 
 
   constructor(
-   // private flashMessagesService: FlashMessagesService,
+    // private flashMessagesService: FlashMessagesService,
     private myRouter: Router,
-   // private userService: UserService,
+    private userService: UserService,
     private sanitizer: DomSanitizer,
     // private FB: FacebookService,
-   // private globals: Globals,
-   // private messageService: MessageService
+    private globals: Globals,
+    // private messageService: MessageService
   ) {
   }
 
@@ -60,33 +61,35 @@ export class NavBarComponent implements OnInit, DoCheck {
 
   logout(): void {
     this.currentUser = null;
+    this.admin = false;
+    this.userService.logout();
     this.showAvatarMenu = false;
     this.showingMessageList = false;
     this.username = null;
     this.avatarimage = '';
-   // this.userService.logout();
+    // this.userService.logout();
     // if (this.FB) {
     // this.FB.logout(); }
-   // this.userService.logout();
-   // console.log('Logging out of the navbar: ' + this.userService.currentUser);
+    // this.userService.logout();
+    // console.log('Logging out of the navbar: ' + this.userService.currentUser);
     this.myRouter.navigate(['/welcome']);
   }
 
 
-   imageExists(url): boolean {
+  imageExists(url): boolean {
 
     const checkImage = new Image();
 
     checkImage.src = url;
 
     if (!checkImage.complete) {
-        return false;
+      return false;
     } else if (checkImage.height === 0) {
-        return false;
+      return false;
     }
 
     return true;
-}
+  }
 
 
   ngOnInit(): void {
@@ -94,24 +97,25 @@ export class NavBarComponent implements OnInit, DoCheck {
     this.showAvatarMenu = false;
     this.showingMessageList = false;
     this.messageListStyle = 'quickMessagesButton';
-  //  this.currentUser = this.userService.currentUser; // getCurrentUser();
+    this.currentUser = this.userService.getCurrentUser();
     this.generateAvatarPath();
     this.admin = false;
+
     if (this.currentUser) {
-     // console.log('Navbar found a current user.');
-   //   console.log('current user: ' + JSON.stringify(this.currentUser));
-    this.admin = this.currentUser.admin;
+      // console.log('Navbar found a current user.');
+      //   console.log('current user: ' + JSON.stringify(this.currentUser));
+      this.admin = this.currentUser.admin;
     }
-  //  this.socket = io(this.globals.basepath);
-//     this.socket.on('userSettingsChanged', (user) => {
-//       this.currentUser = user;
-//       this.admin = this.currentUser.admin;
-//       this.showingMessageList = false;
-//      // console.log('avatar changed');
-//      // setTimeout(this.generateAvatarPath, 3000);
-//    //   setTimeout(() => { this.generateAvatarPath(); }, 3000);
-// //      this.generateAvatarPath();
-//    });
+    //  this.socket = io(this.globals.basepath);
+    //     this.socket.on('userSettingsChanged', (user) => {
+    //       this.currentUser = user;
+    //       this.admin = this.currentUser.admin;
+    //       this.showingMessageList = false;
+    //      // console.log('avatar changed');
+    //      // setTimeout(this.generateAvatarPath, 3000);
+    //    //   setTimeout(() => { this.generateAvatarPath(); }, 3000);
+    // //      this.generateAvatarPath();
+    //    });
     // this.socket.on('userChanged', (user) => {
     //  this.currentUser = user;
     //  this.admin = this.currentUser.admin;
@@ -254,54 +258,54 @@ export class NavBarComponent implements OnInit, DoCheck {
   //     }
   // }
 
-//   checkForDups() {
-//   //  console.log('In checkForDups');
-//     if (this.freshList && this.freshList.length > 0) {
-//       // remove the items that are in both lists, from the main list
+  //   checkForDups() {
+  //   //  console.log('In checkForDups');
+  //     if (this.freshList && this.freshList.length > 0) {
+  //       // remove the items that are in both lists, from the main list
 
-//       this.freshList.map( msgItem => this.removeItemFromMainList(msgItem));
-//     }
-//   }
+  //       this.freshList.map( msgItem => this.removeItemFromMainList(msgItem));
+  //     }
+  //   }
 
-//   removeItemFromMainList(msgItem) {
-//  //   console.log('checking for duplicity.');
-//     if ( this.list && this.list.length > 0) {
-//     //  console.log('about to loop.');
-//    for (let i = 0; i < this.list.length; i ++) {
-//     // console.log(' In the Loop: ' + i + ', :' + JSON.stringify(this.list[i]['msg']) );
-//     console.log('found a dup');
+  //   removeItemFromMainList(msgItem) {
+  //  //   console.log('checking for duplicity.');
+  //     if ( this.list && this.list.length > 0) {
+  //     //  console.log('about to loop.');
+  //    for (let i = 0; i < this.list.length; i ++) {
+  //     // console.log(' In the Loop: ' + i + ', :' + JSON.stringify(this.list[i]['msg']) );
+  //     console.log('found a dup');
 
-//      if (this.list[i]['msg'].id === msgItem.msg.id) {
-//        this.list.splice(i, 1);
-//      }
-//    }}
-//   }
+  //      if (this.list[i]['msg'].id === msgItem.msg.id) {
+  //        this.list.splice(i, 1);
+  //      }
+  //    }}
+  //   }
 
-//   openMessageList() {
-//     if (this.showingMessageList) {
-//       this.closeMessageList();
-//     } else {
-//       this.checkFresh();
-//     this.showingMessageList = true;
-//     this.messageListStyle = 'quickMessagesButton_hi';
-//   }
-//   }
+  //   openMessageList() {
+  //     if (this.showingMessageList) {
+  //       this.closeMessageList();
+  //     } else {
+  //       this.checkFresh();
+  //     this.showingMessageList = true;
+  //     this.messageListStyle = 'quickMessagesButton_hi';
+  //   }
+  //   }
 
-//   closeMessageList() {
-//     if (this.showingMessageList) {
-//     this.showingMessageList = false;
+  //   closeMessageList() {
+  //     if (this.showingMessageList) {
+  //     this.showingMessageList = false;
 
-//     if (this.freshMessages && this.freshMessages.length > 0) {
-//       // this.buildFreshMessageList();
-//       this.messageListStyle = 'quickMessagesButtonFresh';
-//       } else {
-//        // this.freshList = null;
-//         this.messageListStyle = 'quickMessagesButton';
-//       }
+  //     if (this.freshMessages && this.freshMessages.length > 0) {
+  //       // this.buildFreshMessageList();
+  //       this.messageListStyle = 'quickMessagesButtonFresh';
+  //       } else {
+  //        // this.freshList = null;
+  //         this.messageListStyle = 'quickMessagesButton';
+  //       }
 
 
-//     }
-//   }
+  //     }
+  //   }
 
   // updateUrl( event ) {
   //   setTimeout( () => { console.log('waited 3 seconds');
@@ -309,56 +313,58 @@ export class NavBarComponent implements OnInit, DoCheck {
   //       }, 2000 );
   // }
 
-generateAvatarPath( ): void {
+  generateAvatarPath(): void {
 
 
     if (this.currentUser) {
-      if (this.currentUser.facebookRegistration) {
-       // console.log('This was a fb reg.');
-        this.avatarimage = this.currentUser.avatarURL;
-        console.log('The avatar url is: ' + this.avatarimage);
-        this.avatarExists = true;
+      console.log('We have a current user.');
+      // if (this.currentUser.facebookRegistration) {
+      //  // console.log('This was a fb reg.');
+      //   this.avatarimage = this.currentUser.avatarURL;
+      //   console.log('The avatar url is: ' + this.avatarimage);
+      //   this.avatarExists = true;
 
-      } else {
-       // console.log('This was not a fb reg.');
-       if (this.currentUser.avatarFilename) {
-      //  this.avatarimage = this.globals.avatars + '/' + this.currentUser.id + '/' + this.currentUser.avatarFilename;
-
-        if (this.imageExists(this.avatarimage) ) {
-      //    console.log('image exists.');
+      // } else {
+      // console.log('This was not a fb reg.');
+      if (this.currentUser.avatarFilename) {
+        this.avatarimage = this.globals.avatars + '/' + this.currentUser.userId + '/' + this.currentUser.avatarFilename;
+        console.log('image: ', this.avatarimage );
+        if (this.imageExists(this.avatarimage)) {
+          console.log('image exists.');
           this.avatarExists = true;
         } else {
           this.avatarExists = false;
-         // console.log('image doesnt yet exist.');
-          setTimeout( () => { console.log('waited 2 seconds');
-          // this.avatarimage = this.globals.avatars + '/' + this.currentUser.id + '/' + this.currentUser.avatar_filename;
-          // this.avatarExists = true;
-        }, 2000 );
+          // console.log('image doesnt yet exist.');
+          setTimeout(() => {
+            console.log('waited 2 seconds');
+            // this.avatarimage = this.globals.avatars + '/' + this.currentUser.id + '/' + this.currentUser.avatar_filename;
+            // this.avatarExists = true;
+          }, 2000);
         }
       } else {
         this.avatarExists = true;
-      //  this.avatarimage = this.globals.avatars + '/placeholder.png';
-        }
+        //  this.avatarimage = this.globals.avatars + '/placeholder.png';
       }
     }
+    // }
   }
 
   gotoSettings(): void {
     this.showAvatarMenu = false;
- //   const navigationString = '/usersettings/' + this.userService.currentUser.id + '/edit';
-   // console.log('navigating to: ' + navigationString);
-   // this.myRouter.navigate([navigationString]);
+    //   const navigationString = '/usersettings/' + this.userService.currentUser.id + '/edit';
+    // console.log('navigating to: ' + navigationString);
+    // this.myRouter.navigate([navigationString]);
   }
 
- ngDoCheck(): void {
-  this.username = localStorage.getItem('username');
-  if (!this.username || this.username === '') {
-    // this.currentUser = this.userService.getCurrentUser();
-    if (this.currentUser) {
-      this.username = this.currentUser.username;
+  ngDoCheck(): void {
+    this.username = localStorage.getItem('username');
+    if (!this.username || this.username === '') {
+      // this.currentUser = this.userService.getCurrentUser();
+      if (this.currentUser) {
+        this.username = this.currentUser.username;
+      }
     }
+    // this.updateAvatar();
   }
-  // this.updateAvatar();
- }
 
 }
