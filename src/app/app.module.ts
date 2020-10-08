@@ -27,6 +27,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 // import { AlertModule } from 'ngx-alerts';
 import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
+import { ContactComponent } from './welcome/contact/contact.component';
+import { ContactService } from './services/contact.service';
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -36,7 +38,7 @@ import { RouterModule } from '@angular/router';
     AppComponent,
     WelcomeComponent,
     LoginComponent,
-
+    ContactComponent
   ],
   imports: [
     CommonModule,
@@ -57,6 +59,7 @@ import { RouterModule } from '@angular/router';
     AssignmentsService,
     UserService,
     UsersResolver,
+    ContactService,
     Globals,
     HttpCacheService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },

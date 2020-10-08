@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 // import { Http, Response, Headers, RequestOptions } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
@@ -10,6 +11,8 @@ import { Globals } from '../globals2';
 import { UserService } from './user.service';
 // import { Assignment } from '../models/assignment.model';
 import { CFMessage } from '../models/cfmessage.model';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable()
@@ -19,7 +22,12 @@ export class ContactService {
   highestID: string;
   contactFormMessages: CFMessage[];
 
-  constructor(private http: HttpClient, private globals: Globals, private userService: UserService) { }
+  constructor(
+    private http: HttpClient, private globals: Globals, private userService: UserService,
+
+    ) {
+    this.highestID = '0';
+  }
 
 
   sendMsg(msgObject): Observable<any> {
@@ -33,8 +41,8 @@ export class ContactService {
     const url = this.globals.sendCFMsg;
     const putString = url + '?id=' + msgObject.id;
 
-    return this.http.put(putString, msgObject, { headers: myHeaders }).map(
-      () => msgObject);
+    return this.http.put(putString, msgObject, { headers: myHeaders });
+    // .map(  () => msgObject);
   }
 
   getHighestID(): string {

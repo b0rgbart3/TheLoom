@@ -40,10 +40,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
     // private alertService: AlertService,
     // private flashMessagesService: FlashMessagesService,
     private myRouter: Router,
+    private toastr: ToastrService,
     private userService: UserService,
     private globals: Globals,
     private formBuilder: FormBuilder,
-    private toastr: ToastrService
+
     //    private alertService: AlertService
     // private flashMessage: FlashMessagesService
     //  private notes: LoomNotificationsService
@@ -119,7 +120,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
           localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
         },
         (err: any) => {
-          this.errorMessage = err; console.log('improper creds.');
+          this.errorMessage = err; console.log('improper creds.', err);
           this.toastr.error('Oops.  Wrong credentials.   Please try again.');
         },
         () => {
