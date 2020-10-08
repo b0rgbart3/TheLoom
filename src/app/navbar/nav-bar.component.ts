@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 // import { UserService } from '../services/user.service';
 // import { Subscription } from 'rxjs/Subscription';
 import { DomSanitizer } from '@angular/platform-browser';
+
 // import { Globals } from '../globals2';
 // // import * as io from 'socket.io-client';
 // // import { MessageService } from '../services/message.service';

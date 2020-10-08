@@ -10,6 +10,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { LoomNotification } from '../models/loom.notification.model';
 import { DataError } from '../models/dataerror.model';
 
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   // moduleId: module.id,
   templateUrl: 'login.component.html',
@@ -41,6 +43,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private globals: Globals,
     private formBuilder: FormBuilder,
+    private toastr: ToastrService
+//    private alertService: AlertService
+    // private flashMessage: FlashMessagesService
     //  private notes: LoomNotificationsService
   ) { }
 
@@ -85,6 +90,22 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // showFlash(): void {
+  //   // 1st parameter is a flash message text
+  //   // 2nd parameter is optional. You can pass object with options.
+  //   this.flashMessage.show('Welcome To TheRichPost.com', { cssClass: 'custom-success', timeout: 1000 });
+  // }
+  // showAlerts(): void {
+  //   this.alertService.info('this is an info alert');
+  //   this.alertService.danger('this is a danger alert');
+  //   this.alertService.success('this is a success alert');
+  //   this.alertService.warning('this is a warning alert');
+  // }
+
+  showSuccess(): void {
+    this.toastr.success('Hello world!', 'Toastr fun!');
+  }
+
   login(): void {
     console.log('In login method');
     this.loading = true;
@@ -101,17 +122,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
 
 
-continue(): void {
-  if (this.userService.redirectUrl) {
-    const wantedURL = this.userService.redirectUrl;
-    // this.userService.redirectUrl = ''; // clear it out
-    //  this.userService.redirectMsg = '';
-    this.myRouter.navigateByUrl(this.userService.redirectUrl);
-  } else {
-    this.myRouter.navigate(['/home']);
+  continue(): void {
+    if (this.userService.redirectUrl) {
+      const wantedURL = this.userService.redirectUrl;
+      // this.userService.redirectUrl = ''; // clear it out
+      //  this.userService.redirectMsg = '';
+      this.myRouter.navigateByUrl(this.userService.redirectUrl);
+    } else {
+      this.myRouter.navigate(['/home']);
+    }
+    console.log('AUTHENTICATED! - : ' + JSON.stringify(this.currentUser));
   }
-  console.log('AUTHENTICATED! - : ' + JSON.stringify(this.currentUser));
-}
+
 }
             //   result => {
 

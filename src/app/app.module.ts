@@ -6,7 +6,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { WelcomeComponent } from '../app/welcome/welcome.component';
-import { NavBarComponent } from '../app/navbar/nav-bar.component';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -24,6 +23,10 @@ import { HttpCacheService } from './resolvers/cache';
 import { SharedModule } from './shared/shared.module';
 import { LoginComponent } from './login';
 import { ReactiveFormsModule } from '@angular/forms';
+// import { FlashMessagesModule } from 'angular2-flash-messages/module/module';
+// import { AlertModule } from 'ngx-alerts';
+import { ToastrModule } from 'ngx-toastr';
+import { RouterModule } from '@angular/router';
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -31,7 +34,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
-    NavBarComponent,
     WelcomeComponent,
     LoginComponent,
 
@@ -42,10 +44,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MatMenuModule,
-    MatIconModule,
-    AppRoutingModule,
     SharedModule,
+    AppRoutingModule,
+    // Specify your library as an import
+    // AlertModule.forRoot({maxMessages: 5, timeout: 5000, positionX: 'right'})
+    ToastrModule.forRoot(), // ToastrModule added
 
   ],
   providers: [
