@@ -9,6 +9,7 @@ import { Course } from '../models/course.model';
 import { Assignment } from '../models/assignment.model';
 import { Globals } from '../globals2';
 import { Reset } from '../models/reset.model';
+import { of } from 'rxjs';
 import * as io from 'socket.io-client';
 // import { Console } from 'console';
 import { Userthumbnail } from '../models/userthumbnail.model';
@@ -65,7 +66,7 @@ export class UserService {
     this.avatarImageUrl = this.globals.avatars;
     // this.socket = io(this.globals.basepath);
     this.usersLoaded = false;
-   // this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   }
 
@@ -304,6 +305,34 @@ export class UserService {
   }
 
 
+  createUser(userObject: User): Observable<any> {
+    // this.subscribeToUsers();
+    // console.log('Made it to the createUser method.');
+
+    const myHeaders = new HttpHeaders();
+    myHeaders.append('Content-Type', 'application/json');
+    userObject.id = '' + this.highestID; // toString();
+    const body = JSON.stringify(userObject);
+    //  console.log('Highest ID: ' + this.highestID );
+    // console.log('In postUser.');
+    // console.log( 'Posting User: ', body   );
+    // console.log(this._usersUrl);
+
+    // Let's double check to make sure this username or email doesn't already exist
+    if (this.findUserByUsername(userObject.username) != null) {
+      return of('We\'re sorry, but an account with that Username already exists.' +
+        'Please choose a different Username.');
+    } else {
+
+      if (this.findUserByEmail(userObject.email) != null) {
+        return of('We\'re sorry but an account with that Email address already exists.');
+      } else {
+        return this.http.put(this.globals.users + '?id=0', userObject, { headers: myHeaders });
+      }
+    }
+
+  }
+
   // this.logout();
   // const myHeaders = new HttpHeaders();
   // myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -324,4 +353,35 @@ export class UserService {
   //             this.socket.emit('userChanged', this.currentUser);
   //            return <User> response;
   //         }).catch( error => {   console.log('ERROR: ' + JSON.stringify( error) ); return Observable.of(error); } );
+
+
+
+  findUserByUsername(queryName): User {
+    let foundUser = null;
+
+    console.log('searching for a user with a username of: ' + queryName);
+    if (this.users) {
+
+      this.users.forEach( user => {
+        console.log(user.username);
+        if (user.username === queryName) {
+          foundUser = user;
+        }
+      });
+    }
+
+    return foundUser;
+  }
+  findUserByEmail(queryEmail): User {
+    let foundUser = null;
+    if (this.users) {
+      this.users.forEach( user => {
+        if (user.email === queryEmail) {
+          foundUser = user;
+        }
+      });
+
+    }
+    return foundUser;
+  }
 }

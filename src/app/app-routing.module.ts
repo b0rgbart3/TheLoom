@@ -10,11 +10,16 @@ import { ClassesResolver } from './resolvers/classes.resolver';
 import { AssignmentsResolver } from './resolvers/assignments.resolver';
 import { LoginComponent } from './login/login.component';
 import { ContactComponent } from './welcome/contact/contact.component';
+import { SignupComponent } from './users/signup/signup.component';
 
 const loomRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'welcome', component: WelcomeComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'signup', component: SignupComponent,
+    resolve: {
+      resolvedUsers: UsersResolver,
+    }},
   {
     path: '**', component: WelcomeComponent,
 

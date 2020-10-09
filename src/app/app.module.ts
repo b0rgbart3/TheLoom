@@ -29,6 +29,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { RouterModule } from '@angular/router';
 import { ContactComponent } from './welcome/contact/contact.component';
 import { ContactService } from './services/contact.service';
+import { SignupComponent } from './users/signup/signup.component';
+import { AlertService } from './services/alert.service';
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -38,7 +40,8 @@ import { ContactService } from './services/contact.service';
     AppComponent,
     WelcomeComponent,
     LoginComponent,
-    ContactComponent
+    ContactComponent,
+    SignupComponent
   ],
   imports: [
     CommonModule,
@@ -54,6 +57,7 @@ import { ContactService } from './services/contact.service';
 
   ],
   providers: [
+    AlertService,
     ClassService,
     CourseService,
     AssignmentsService,
