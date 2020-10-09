@@ -8,11 +8,11 @@ import { Userthumbnail } from '../../models/userthumbnail.model';
 import { DiscussionSettings } from '../../models/discussionsettings.model';
 import { DiscussionService } from '../../services/discussion.service';
 import { EnrollmentsService } from '../../services/enrollments.service';
-import { ClickOutsideDirective } from '../../_directives/clickOutside.directive';
+import { ClickOutsideDirective } from '../../directives/clickOutside.directive';
 
 @Component({
 
-  selector: 'biopop',
+  selector: 'bio-pop',
   templateUrl: './biopop.component.html',
   styleUrls: ['./biopop.component.css'],
 
@@ -20,7 +20,7 @@ import { ClickOutsideDirective } from '../../_directives/clickOutside.directive'
 
 
 
-export class BioPopComponent implements OnInit, OnChanges {
+export class BiopopComponent implements OnInit, OnChanges {
 
 @Input() bioUser: User;
 @Input() allowMessage: boolean;
@@ -41,7 +41,7 @@ thumbnail: Userthumbnail;
     }
 
     makeThumb(): void {
-      this.thumbnail = { user: this.bioUser, userId: this.bioUser.id, online: false,
+      this.thumbnail = { user: this.bioUser, userId: this.bioUser.userId, online: false,
         size: 220,  showUsername: false, showInfo: false, textColor: '#ffffff', border: true, shape: 'circle' };
     }
     closer(): void {

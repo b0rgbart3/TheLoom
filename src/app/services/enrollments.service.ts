@@ -30,8 +30,8 @@ export class EnrollmentsService {
   }
 
   getEnrollmentsInClass(classID): Observable<any> {
-    return this.http.get<Enrollment[]>(this.globals.enrollments + '?classId=' + classID)
-      .do(data => data).catch(this.handleError);
+    return this.http.get<Enrollment[]>(this.globals.enrollments + '?classId=' + classID);
+    //      .do(data => data).catch(this.handleError);
   }
   // Get a list of student ID#s that are in this class.
   // getStudentsInClass( classID ): string[] {
@@ -44,24 +44,24 @@ export class EnrollmentsService {
   // }
 
   getAllEnrollments(): Observable<any> {
-    return this.http.get<Enrollment[]>(this.globals.enrollments)
-      .do(data => {
-        this.enrollments = data;
-        return data;
-      }).catch(this.handleError);
+    return this.http.get<Enrollment[]>(this.globals.enrollments);
+    // .do(data => {
+    //   this.enrollments = data;
+    //   return data;
+    // }).catch(this.handleError);
 
   }
   // Return the list of student enrollments for the current user
   getEnrollments(): Observable<any> {
     return this.http.get<Enrollment[]>(this.globals.enrollments + '?userId=' +
-      this.userService.getCurrentUser().id)
-      .do(data => {
-        return data;
-      }).catch(this.handleError);
+      this.userService.getCurrentUser().id);
+    // .do(data => {
+    //   return data;
+    // }).catch(this.handleError);
 
   }
 
-  postEnrollment(enrollment): Observable<Enrollment> {
+  postEnrollment(enrollment): Observable<{}> {
 
     enrollment.id = this.getNextId();
     console.log('New id =' + enrollment.id);
@@ -72,8 +72,8 @@ export class EnrollmentsService {
     this.enrollments.push(enrollment);
 
     console.log('About to place put request for: ' + JSON.stringify(enrollment));
-    return this.http.put(this.globals.enrollments + '?id=0', enrollment, { headers: myHeaders }).map(
-      () => enrollment).catch(this.handleError);
+    return this.http.put(this.globals.enrollments + '?id=0', enrollment, { headers: myHeaders });
+    // .map(() => enrollment).catch(this.handleError);
 
   }
 
@@ -82,7 +82,8 @@ export class EnrollmentsService {
     // console.log('In the service, calling delete: ' + enrollment_id);
     const urlstring = this.globals.enrollments + '?id=' + enrollmentId;
     // console.log('urlstring: ' + urlstring);
-    return this.http.delete(urlstring).do(data => data);
+    return this.http.delete(urlstring);
+    // .do(data => data);
   }
 
   getNextId(): string {
@@ -93,10 +94,10 @@ export class EnrollmentsService {
   }
 
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
+  private handleError(error: HttpErrorResponse): string {
     console.log('ERROR:');
     console.log(JSON.stringify(error));
-    return Observable.of(error.message);
+    return error.message;
 
   }
 
@@ -104,7 +105,7 @@ export class EnrollmentsService {
     // Loop through all the Materials to find the highest ID#
     if (this.enrollments && this.enrollments.length > 0) {
 
-      this.enrollments.forEach( enrollment => {
+      this.enrollments.forEach(enrollment => {
         const foundID = Number(enrollment.enrollmentId);
         if (foundID >= this.highestID) {
           const newHigh = foundID + 1;

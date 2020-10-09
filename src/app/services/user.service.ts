@@ -135,7 +135,9 @@ export class UserService {
   }
 
   grabInstructorThumbnailsByClassId(classId: string): Userthumbnail[] {
+    if (this.instructorThumbnailsByClass) {
     return this.instructorThumbnailsByClass[classId];
+    }
   }
 
   // Organize Instructors by Class based on Assignment Data

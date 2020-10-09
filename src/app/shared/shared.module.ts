@@ -11,6 +11,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from '../app-routing.module';
 import { RouterModule } from '@angular/router';
+import { ClickOutsideDirective } from '../directives/clickOutside.directive';
+import { BiopopComponent } from '../classes/class/biopop.component';
 
 
 
@@ -26,7 +28,9 @@ import { RouterModule } from '@angular/router';
         ClassListComponent,
         ClassThumbComponent,
         UserThumbComponent,
-        NavBarComponent
+        NavBarComponent,
+        ClickOutsideDirective,
+        BiopopComponent,
     ],
     providers: [
         FormsModule, ReactiveFormsModule,
@@ -39,7 +43,9 @@ import { RouterModule } from '@angular/router';
         ClassListComponent,
         ClassThumbComponent,
         UserThumbComponent,
-        NavBarComponent
+        NavBarComponent,
+        ClickOutsideDirective,
+        BiopopComponent,
     ]
 
 })

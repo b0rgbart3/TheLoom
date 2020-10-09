@@ -1,14 +1,14 @@
 import { Injectable, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { HttpErrorResponse } from '@angular/common/http';
 // import { Http, Response, Headers, RequestOptions } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import * as io from 'socket.io-client';
+import { SocketIOClient } from 'socket.io-client';
 
-import { ClassModel } from '../models/class.model';
+import { ClassModel } from '../models/classModel.model';
 import { Thread } from '../models/thread.model';
 import { Globals } from '../globals2';
 import { User } from '../models/user.model';
@@ -16,7 +16,7 @@ import { LoomNotificationsService } from '../services/loom.notifications.service
 import { LoomNotification } from '../models/loom.notification.model';
 import { DiscussionSettings } from '../models/discussionsettings.model';
 // import { HttpParamsOptions } from '@angular/common/http/src/params';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+// import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
@@ -56,7 +56,7 @@ export class DiscussionService {
     this.userEntered = new EventEmitter();
     this.threadUpdated = new EventEmitter();
 
-    this.socket = io(this.globals.basepath);
+    this.socket = this.socket(this.globals.basepath);
 
     this.socket.on('updatethread', (data) => {
       console.log('GOT A THREAD UPDATE');
@@ -93,32 +93,32 @@ export class DiscussionService {
     const myHeaders = new HttpHeaders();
     myHeaders.append('Content-Type', 'application/json');
 
-    return this.http.get<DiscussionSettings[]>(this.globals.discussionsettings, { headers: myHeaders })
-      // debug the flow of data
-      .do(data => {
-        //    console.log('Got All ths dsObjects: ' + JSON.stringify(data));
-        this.discussionSettings = data;
-        this.dsCount = data.length;
+    return this.http.get<DiscussionSettings[]>(this.globals.discussionsettings, { headers: myHeaders });
 
-        // Loop through all the Classes to find the highest ID#
-        data.forEach( datum => {
-          const foundID = Number(datum.discussionSettingsId);
+    // // debug the flow of data
+    // .subscribe(data => {
+    //   //    console.log('Got All ths dsObjects: ' + JSON.stringify(data));
+    //   this.discussionSettings = data;
+    //   this.dsCount = data.length;
 
-          if (foundID >= this.highestID) {
-            const newHigh = foundID + 1;
-            this.highestID = newHigh;
-          }
-        });
+    //   // Loop through all the Classes to find the highest ID#
+    //   data.forEach(datum => {
+    //     const foundID = Number(datum.discussionSettingsId);
 
-      })
-      .catch(this.handleError);
+    //     if (foundID >= this.highestID) {
+    //       const newHigh = foundID + 1;
+    //       this.highestID = newHigh;
+    //     }
+    //   });
+
+    // });
   }
 
   updateIDCount(): void {
     // Loop through all the Materials to find the highest ID#
     if (this.discussionSettings && this.discussionSettings.length > 0) {
 
-      this.discussionSettings.forEach( ds => {
+      this.discussionSettings.forEach(ds => {
         const foundID = Number(ds.discussionSettingsId);
         // console.log('Found ID: ' + foundID);
         if (foundID >= this.highestID) {
@@ -157,7 +157,7 @@ export class DiscussionService {
       discussionSettingsObject.folds = [];
     }
     return this.http.put(this.globals.discussionsettings + '?id=' + discussionSettingsObject.id, discussionSettingsObject,
-      { headers: myHeaders }).map(() => console.log('DONE'));
+      { headers: myHeaders });
 
 
   }
@@ -166,18 +166,18 @@ export class DiscussionService {
     myHeaders.append('Content-Type', 'application/json');
 
     return this.http.get<DiscussionSettings>(this.globals.discussionsettings +
-      '?userId=' + userId + '&classId=' + classId + '&section=' + section, { headers: myHeaders })
-      .do(data => {
-        // console.log('Got Discussion Settings back from the API' + JSON.stringify(data));
-        return data;
-      })
-      .catch(this.handleError);
+      '?userId=' + userId + '&classId=' + classId + '&section=' + section, { headers: myHeaders });
+    // .do(data => {
+    //   // console.log('Got Discussion Settings back from the API' + JSON.stringify(data));
+    //   return data;
+    // })
+    // .catch(this.handleError);
   }
 
   updatehighestID(): void {
     // Loop through all the Classes to find the highest ID#
 
-    this.threads.forEach( thread => {
+    this.threads.forEach(thread => {
       const foundID = Number(thread.threadId);
 
       if (foundID >= this.highestID) {
@@ -196,29 +196,28 @@ export class DiscussionService {
 
     //   console.log('Looking to load threads for class: ' + classId + ', and section: ' + section);
     return this.http.get<Thread[]>(this.globals.threads + '?classId=' + classId + '&section=' +
-      section, { headers: myHeaders })
-      // debug the flow of data
-      .do(data => {
-        // console.log('All: ' + JSON.stringify(data));
+      section, { headers: myHeaders });
+    // debug the flow of data
+    // .do(data => {
+    //   // console.log('All: ' + JSON.stringify(data));
 
-        // Is there any point in keeping a local copy of the threads?
-        this.threads = data;
+    //   // Is there any point in keeping a local copy of the threads?
+    //   this.threads = data;
 
-        this.updatehighestID();
-        // console.log('Thread\'s highest ID: ' + this.highestID);
+    //   this.updatehighestID();
+    //   // console.log('Thread\'s highest ID: ' + this.highestID);
 
-      })
-      .catch(this.handleError);
+    // })
+    //  .catch(this.handleError);
   }
 
 
 
   getThread(id): Observable<any> {
-    return this.http.get<Thread[]>(this.globals.threads + '?id=' + id)
-      .do(data => {
-        // console.log( JSON.stringify(data));  this.threadAdded.emit( data[0] );
-      })
-      .catch(this.handleError);
+    return this.http.get<Thread[]>(this.globals.threads + '?id=' + id);
+    //   // console.log( JSON.stringify(data));  this.threadAdded.emit( data[0] );
+    // })
+    // .catch(this.handleError);
   }
 
   deleteThread(thread): Observable<any> {
@@ -229,7 +228,7 @@ export class DiscussionService {
   }
 
 
-  newThread(thread): Observable<Thread> {
+  newThread(thread): Observable<any> {
 
     thread.id = this.highestID.toString();
     this.highestID++;
@@ -248,7 +247,9 @@ export class DiscussionService {
     // and if it exists already, then determine what it should be
 
     return this.http.put(this.globals.threads + '?id=' + thread.id, thread,
-      { headers: myHeaders }).map(() => thread);
+      { headers: myHeaders });
+
+      // .map(() => thread);
 
   }
 
@@ -261,18 +262,19 @@ export class DiscussionService {
     // Note: I'm not passing the id as part of the url -- because it's inside the classObject
     const url = this.globals.threads;
     return this.http.put(url + '?id=' + thread.id,
-      thread, { headers: myHeaders }).do(data => {
-        console.log('Successfully Put the UPDATE to the thread: ' + JSON.stringify(thread));
+      thread, { headers: myHeaders });
+      // .do(data => {
+      //   console.log('Successfully Put the UPDATE to the thread: ' + JSON.stringify(thread));
 
-        this.socket.emit('updatethread', thread);
-      }).catch(this.handleError);
+      //   this.socket.emit('updatethread', thread);
+      // }).catch(this.handleError);
 
   }
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
+  private handleError(error: HttpErrorResponse): string {
     console.log('ERROR:');
     console.log(JSON.stringify(error));
-    return Observable.of(error.message);
+    return error.message;
 
   }
 
