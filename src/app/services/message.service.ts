@@ -152,7 +152,7 @@ export class MessageService {
     myHeaders.append('Content-Type', 'application/json');
     //  console.log('saving the Message');
 
-    return this.http.put(this.globals.messages + '?id=' + message.id, message, { headers: myHeaders });
+    return this.http.put(this.globals.messages + '?id=' + message.messageId, message, { headers: myHeaders });
     // .map(
     //   () => {
     //     console.log('in msg service, done creating new message');
@@ -168,7 +168,7 @@ export class MessageService {
     myHeaders.append('Content-Type', 'application/json');
     console.log('saving the Message');
 
-    return this.http.put(this.globals.messages + '?id=' + message.id, message, { headers: myHeaders });
+    return this.http.put(this.globals.messages + '?id=' + message.messageId, message, { headers: myHeaders });
     // .map(
     //   () => {
     //     this.socket.emit('messageChanged', message);

@@ -23,6 +23,11 @@ export class EnrollmentsService {
   constructor(private http: HttpClient, private globals: Globals, private userService: UserService) { }
 
 
+
+  takeInResolvedData(enrollments: Enrollment[]): void {
+    this.enrollments = enrollments;
+  }
+
   getEnrollmentsNow(): void {
     this.getEnrollments().subscribe(
       data => this.enrollments = data,

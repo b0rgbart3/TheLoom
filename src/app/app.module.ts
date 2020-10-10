@@ -37,6 +37,11 @@ import { EnrollmentsResolver } from './resolvers/enrollments.resolver';
 import { AuthGuard } from './services/auth-guard.service';
 import { HomeComponent } from './home/home.component';
 import { ClassComponent } from './classes/class/class.component';
+import { MessageService } from './services/message.service';
+import { LoomNotificationsService } from './services/loom.notifications.service';
+import { MessagesResolver } from './resolvers/messages-resolver';
+import { DiscussionService } from './services/discussion.service';
+import { AssignmentsResolver } from './resolvers/assignments.resolver';
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -48,8 +53,8 @@ import { ClassComponent } from './classes/class/class.component';
     LoginComponent,
     ContactComponent,
     SignupComponent,
-    RegisterComponent,
     HomeComponent,
+    RegisterComponent,
     ClassComponent
   ],
   imports: [
@@ -71,11 +76,16 @@ import { ClassComponent } from './classes/class/class.component';
     ClassService,
     CourseService,
     AssignmentsService,
+    AssignmentsResolver,
     EnrollmentsService,
     EnrollmentsResolver,
     UserService,
     UsersResolver,
+    LoomNotificationsService,
     ContactService,
+    MessageService,
+    MessagesResolver,
+    DiscussionService,
     Globals,
     HttpCacheService,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },

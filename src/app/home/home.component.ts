@@ -11,10 +11,13 @@ import { Enrollment } from '../models/enrollment.model';
 import { Assignment } from '../models/assignment.model';
 import { LoomNotificationsService } from '../services/loom.notifications.service';
 import { LoomNotification } from '../models/loom.notification.model';
+import { DataError } from '../models/dataerror.model';
+import { EnrollmentsService } from '../services/enrollments.service';
+import { AssignmentsService } from '../services/assignments.service';
 
 
 @Component({
-   // moduleId: module.id,
+    // moduleId: module.id,
     templateUrl: 'home.component.html',
     styleUrls: ['home.component.css']
 })
@@ -33,6 +36,9 @@ export class HomeComponent implements OnInit {
     classesTeaching: ClassModel[];
     enrollments: Enrollment[];
     assignments: Assignment[];
+    users: User[];
+    courses: Course[];
+    classes: ClassModel[];
 
     constructor(
         private userService: UserService,
@@ -41,7 +47,9 @@ export class HomeComponent implements OnInit {
         private globals: Globals,
         private courseService: CourseService,
         private activatedRoute: ActivatedRoute,
-        private notes: LoomNotificationsService) {
+        private notes: LoomNotificationsService,
+        private enrollmentService: EnrollmentsService,
+        private assignmentsService: AssignmentsService) {
     }
 
     ngOnInit(): void {
@@ -53,15 +61,67 @@ export class HomeComponent implements OnInit {
         this.takingLabel = 'tabLabelChosen';
         this.teachingLabel = 'tabLabel';
 
-        // Get the student enrollment objects for the current user
-        this.enrollments = this.activatedRoute.snapshot.data.enrollments;
+        const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
+        const resolvedClassData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
+        const resolvedCourseData: Course[] | DataError = this.activatedRoute.snapshot.data[`resolvedCourses`];
+        const resolvedAssignmentData: Assignment[] | DataError = this.activatedRoute.snapshot.data[`resolvedAssignments`];
 
-        // extract out just the ID's into an array
+        let dataError = false;
+        if (resolvedUserData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedUserData}`);
+            dataError = true;
+        } else {
+            this.users = resolvedUserData;
+            this.userService.takeInResolvedData(this.users);
+        }
+        if (resolvedCourseData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedCourseData}`);
+            dataError = true;
+        } else {
+            this.courses = resolvedCourseData;
+            this.courseService.takeInResolvedData(this.courses);
+        }
+        if (resolvedClassData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedClassData}`);
+            dataError = true;
+        } else {
+            this.classes = resolvedClassData;
+            console.log('classes:', this.classes);
+            this.classService.takeInResolvedData(this.classes);
+        }
+        if (resolvedAssignmentData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedAssignmentData}`);
+            dataError = true;
+        } else {
+            this.assignments = resolvedAssignmentData;
+            this.assignmentsService.takeInResolvedData(this.assignments);
+        }
+
+        if (!dataError) {
+            //  console.log('Got all the data.');
+            this.userService.createInstructorsDataObject(this.users, this.assignments, this.classes, this.courses);
+        }
+
+
+        console.log('Got routed to the home component.');
+        const resolvedEnrollmentData: Enrollment[] | DataError = this.activatedRoute.snapshot.data[`resolvedEnrollments`];
+
+
+        if (resolvedEnrollmentData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedEnrollmentData}`);
+            dataError = true;
+        } else {
+            this.enrollments = resolvedEnrollmentData;
+            this.enrollmentService.takeInResolvedData(this.enrollments);
+        }
+
+        console.log('Enrollments: ', this.enrollments);
         if (this.enrollments) {
             this.classesTakingIDList = this.enrollments.map(enrollment => enrollment.classId);
         }
 
-        //   console.log('Classes Taking ID List: ' + JSON.stringify(this.classesTakingIDList));
+
+        console.log('Classes Taking ID List: ', this.classesTakingIDList);
 
         // Ask the class service for a class object for each id in that array
         if (this.classesTakingIDList && this.classesTakingIDList.length > 0) {
@@ -71,19 +131,37 @@ export class HomeComponent implements OnInit {
         }
         //   console.log('TAKING: ' + JSON.stringify(this.classesTaking));
 
-        this.assignments = this.activatedRoute.snapshot.data.assignments;
+        // this.assignments = this.activatedRoute.snapshot.data.assignments;
+        // const resolvedAssignmentData: Assignment[] | DataError = this.activatedRoute.snapshot.data[`resolvedAssignments`];
+
+        // if (resolvedAssignmentData instanceof DataError) {
+        //     console.log(`Data loading error: ${resolvedAssignmentData}`);
+        //     dataError = true;
+        // } else {
+        //     this.assignments = resolvedAssignmentData;
+        //     this.assignmentService.takeInResolvedData(this.assignments);
+        // }
+
+        console.log('Assignments: ', this.assignments);
 
         if (this.assignments) {
             this.classesTeachingIDList = this.assignments.map(assignment => assignment.classId);
         }
-
+        console.log('Classes Teaching ID List: ', this.classesTeachingIDList);
+        this.classesTeaching = [];
         if (this.classesTeachingIDList && this.classesTeachingIDList.length > 0) {
-            this.classesTeaching = this.classesTeachingIDList.map(classID => this.classService.getClassFromMemory(classID));
+            this.classesTeachingIDList.forEach((classID) =>
+             {
+                 const foundClass = this.classes.filter( classObject => {
+                    if (classObject.classId === classID) {
+                 this.classesTeaching.push( classObject ); }
+                    });
+            });
         } else {
             this.classesTeaching = null;
         }
 
-
+        console.log('classesTeaching: ', this.classesTeaching);
 
         if ((this.classesTaking === null) && (this.classesTeaching !== null)) {
             this.showTeaching = true;

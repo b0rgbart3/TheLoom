@@ -32,7 +32,11 @@
               "src/toast.css"
             ],
             "scripts": [
-            ]
+            ],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "socket.io-client"
+           ]
           },
           "configurations": {
             "production": {

@@ -10,8 +10,10 @@
         <div *ngIf='classesTaking && showTaking' class='listOfClasses'>
                         <div class="list-group-item"
                         *ngFor="let classObject of classesTaking">
+                        <p>Course: </p>
                         <div (click)='goto(classObject.id)' class='clickableDiv'>
-                        <class-thumb [classObject]=classObject [showTeachers]=false></class-thumb>
+                        <!-- <class-thumb [classObject]=classObject [showTeachers]=false></class-thumb> -->
+                        <class-thumb [classObject]=classObject [currentUser]='currentUser' [showTeachers]=true [showRegButtons]='showRegButtons' [users] ='users' [classes] ='classes' [courses] ='courses' [assignments]='assignments'></class-thumb>
                         </div></div>
 </div>
 
@@ -19,7 +21,9 @@
                         <div class="list-group-item"
                         *ngFor="let classObject of classesTeaching">
                         <div (click)='goto(classObject.id)' class='clickableDiv'>
-                        <class-thumb [classObject]=classObject></class-thumb></div>
+                        <!-- <class-thumb [classObject]=classObject></class-thumb> -->
+                        <class-thumb [classObject]=classObject [currentUser]='currentUser' [showTeachers]=true [showRegButtons]='showRegButtons' [users] ='users' [classes] ='classes' [courses] ='courses' [assignments]='assignments'></class-thumb>
+                </div>
                         </div>
 
         </div>

@@ -8,7 +8,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { UserService } from '../services/user.service';
 import { Globals } from '../globals2';
 import * as io from 'socket.io-client';
-// // import { MessageService } from '../services/message.service';
 import { Observable } from 'rxjs';
 import { Message } from '../models/message.model';
 import { MessageService } from '../services/message.service';

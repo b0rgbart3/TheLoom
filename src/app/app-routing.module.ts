@@ -67,12 +67,12 @@ const loomRoutes: Routes = [
   {
     path: 'classes', component: HomeComponent, canActivate: [AuthGuard],
     resolve: {
-      users: UsersResolver,
-      classes: ClassesResolver,
-      courses: CoursesResolver,
-      enrollments: EnrollmentsResolver,
-      assignments: AssignmentsResolver,
-      //  messages: MessagesResolver
+      resolvedUsers: UsersResolver,
+      resolvedClasses: ClassesResolver,
+      resolvedCourses: CoursesResolver,
+      resolvedEnrollments: EnrollmentsResolver,
+      resolvedAssignments: AssignmentsResolver,
+      resolvedMessages: MessagesResolver
     }
   },
 

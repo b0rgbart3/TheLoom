@@ -1,6 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { Http, Response, Headers, RequestOptions } from '@angular/common';
 import { HttpHeaders } from '@angular/common/http';
@@ -10,6 +11,7 @@ import { Globals } from '../globals2';
 import { Enrollment } from '../models/enrollment.model';
 import { UserService } from './user.service';
 import { Assignment } from '../models/assignment.model';
+import { DataError } from '../models/dataerror.model';
 
 
 @Injectable()
@@ -39,8 +41,20 @@ export class AssignmentsService {
   }
 
   getAssignments(): Observable<any> {
-    return this.http.get<Assignment[]>(this.globals.assignments);
+    return this.http.get<Assignment[]>(this.globals.assignments)
+    .pipe(
+      catchError(err => this.handleHttpError(err))
+    );
   }
+
+
+  private handleHttpError(error: HttpErrorResponse): Observable<DataError> {
+    const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
+
+    return throwError(dataError);
+
+  }
+
   // Return the list of instructor assignments for the current user
   // getAssignment(id): Observable<any> {
   //   return this.http.get<Assignment[]>(this.globals.assignments +
