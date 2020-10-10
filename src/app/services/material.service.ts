@@ -41,9 +41,10 @@ export class MaterialService {
     getAllMaterialsByType(): Observable<any> {
 
        return this.http.get <Material[][]>
-              (this.globals.allmaterialsbytype).do(data => {
-                this.allMaterialsByType = data;
-        }).catch(this.handleError);
+              (this.globals.allmaterialsbytype);
+        //       .do(data => {
+        //         this.allMaterialsByType = data;
+        // }).catch(this.handleError);
 
     }
 
@@ -52,7 +53,8 @@ export class MaterialService {
         // get all the objects for this type
       //  console.log('\nIn material service / getDM: ' + type + '\n');
         return this.http.get <Material[]>
-              (this.globals.materials + '?type=' + type).do(data => {
+              (this.globals.materials + '?type=' + type);
+              // .do(data => {
 
                // console.log('docs:');
               //  data.map( doc => console.log(doc.title));
@@ -63,16 +65,18 @@ export class MaterialService {
                 // sortedObjs.map( doc => console.log(doc.title));
 
             //    const activeMaterials = this.hideRemovalsFromBatch( data );
-                return data;
-        }).catch(this.handleError);
+               // return data;
+       // }).catch(this.handleError);
       } else {
         // pass back a single object of this type
         return this.http.get <Material[]>
-              (this.globals.materials + '?id=' + id + '&type=' + type).do(data => {
-          // keeping a local copy of the data object
-          // -- though I don't think we do anything with it
-          return data; }).catch( this.handleError );
-        }
+              (this.globals.materials + '?id=' + id + '&type=' + type);
+        //       .do(data => {
+        //   // keeping a local copy of the data object
+        //   // -- though I don't think we do anything with it
+        //   return data; }).catch( this.handleError );
+        //
+      }
 
     }
 
@@ -169,11 +173,11 @@ export class MaterialService {
 
 
   getMaterial(id): Observable<any> {
-    return this.http.get<Material> ( this.globals.materials + '?id=' + id )
-      .do(data => {
-         // console.log( 'found: ' + JSON.stringify(data) );
-      return data; })
-      .catch (this.handleError);
+    return this.http.get<Material> ( this.globals.materials + '?id=' + id );
+      // .do(data => {
+      //    // console.log( 'found: ' + JSON.stringify(data) );
+      // return data; })
+      // .catch (this.handleError);
   }
 
   remove( object: Material): Observable<any> {
@@ -187,20 +191,21 @@ export class MaterialService {
 
   recover(object): Observable <any> {
     object.remove_this = false;
-    return this.updateMaterial(object).do(
-      data => {
-        // add this course object back into our main array
-        this.materials.push(data);
-        // remove this course object from our list of removed courses
-        for (let i = 0; i < this.removed.length; i++) {
-          if ( this.removed[i].id === data.id) {
-            this.removed.splice(i, 1);
-          }
-        }
+    return this.updateMaterial(object);
+    // .do(
+    //   data => {
+    //     // add this course object back into our main array
+    //     this.materials.push(data);
+    //     // remove this course object from our list of removed courses
+    //     for (let i = 0; i < this.removed.length; i++) {
+    //       if ( this.removed[i].id === data.id) {
+    //         this.removed.splice(i, 1);
+    //       }
+    //     }
 
-       // console.log('recovering course data');
-        return data; }   )
-      .catch( this.handleError );
+    //    // console.log('recovering course data');
+    //     return data; }   )
+    //   .catch( this.handleError );
 
   }
   deleteMaterial(id: string): Observable<any> {
@@ -242,7 +247,7 @@ export class MaterialService {
 
     private handleError(error: HttpErrorResponse): any {
       // console.log( error.message );
-      return Observable.of(error.message);
+      return error.message;
 
     }
 

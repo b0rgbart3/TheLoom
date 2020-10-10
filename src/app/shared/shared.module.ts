@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { AppRoutingModule } from '../app-routing.module';
 import { RouterModule } from '@angular/router';
-import { ClickOutsideDirective } from '../directives/clickOutside.directive';
+import { ClickOutsideDirective } from '../directives/clickoutside.directive';
 import { BiopopComponent } from '../classes/class/biopop.component';
 
 

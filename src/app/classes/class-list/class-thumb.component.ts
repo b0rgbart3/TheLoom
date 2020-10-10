@@ -27,6 +27,7 @@ export class ClassThumbComponent implements OnInit {
 @Input() users: User[];
 @Input() courses: Course[];
 @Input() assignments: Assignment[];
+@Input() currentUser: User;
 public classImageURL: string;
 public courseID: string;
 public course: Course;
@@ -98,10 +99,14 @@ bioChosen: User;
 
   }
   register(): void {
-    const gotoURL = '/register/' + this.classObject.id;
+    const gotoURL = '/register/' + this.classObject.classId;
     this.userService.redirectMsg = 'To register for a class on the Reclaiming Loom' +
     ' you first need to log in to your account, or sign up to create your account.';
     this.router.navigate( [gotoURL] );
+  }
+
+  login(): void {
+    this.router.navigate( ['/login'] );
   }
 
   showBio(user): void {

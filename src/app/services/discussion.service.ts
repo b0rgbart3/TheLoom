@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { Http, Response, Headers, RequestOptions } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { SocketIOClient } from 'socket.io-client';
+import * as io from 'socket.io-client';
 
 import { ClassModel } from '../models/classModel.model';
 import { Thread } from '../models/thread.model';
@@ -56,7 +56,7 @@ export class DiscussionService {
     this.userEntered = new EventEmitter();
     this.threadUpdated = new EventEmitter();
 
-    this.socket = this.socket(this.globals.basepath);
+    this.socket = io(this.globals.basepath);
 
     this.socket.on('updatethread', (data) => {
       console.log('GOT A THREAD UPDATE');

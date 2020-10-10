@@ -40,16 +40,17 @@ export class NotesService {
     //  classId + ', section: ' + section );
 
     return this.http.get<NotesSettings>(this.globals.notessettings +
-      '?userId=' + userId + '&classId=' + classId + '&section=' + section, { headers: myHeaders })
-      .do(data => {
-        if (data) {
-          // console.log('Got Notes Settings back from the API' + JSON.stringify(data));
-          return data;
-        } else {
-          return new NotesSettings(userId, classId, section + '', false, []);
-        }
-      })
-      .catch(this.handleError);
+      '?userId=' + userId + '&classId=' + classId + '&section=' + section, { headers: myHeaders });
+
+      // .do(data => {
+      //   if (data) {
+      //     // console.log('Got Notes Settings back from the API' + JSON.stringify(data));
+      //     return data;
+      //   } else {
+      //     return new NotesSettings(userId, classId, section + '', false, []);
+      //   }
+      // })
+      // .catch(this.handleError);
   }
 
   storeNotesSettings(notesSettingsObject): Observable<any> {
@@ -61,15 +62,16 @@ export class NotesService {
       notesSettingsObject.folds = [];
     }
     return this.http.put(this.globals.notessettings, notesSettingsObject,
-      { headers: myHeaders }).map(() => console.log('DONE'));
+      { headers: myHeaders });
+      // .map(() => console.log('DONE'));
 
 
   }
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
+  private handleError(error: HttpErrorResponse): string {
     console.log('ERROR:');
     console.log(JSON.stringify(error));
-    return Observable.of(error.message);
+    return error.message;
 
   }
 }

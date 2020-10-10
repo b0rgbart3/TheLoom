@@ -4,6 +4,7 @@ import { Course } from '../../models/course.model';
 import { Assignment } from '../../models/assignment.model';
 import { ClassService } from '../../services/class.service';
 import { User } from '../../models/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'class-list',
@@ -17,6 +18,7 @@ export class ClassListComponent implements OnInit {
   selectedClass: {};
   errorMessage: string;
   admin: boolean;
+  currentUser: User;
 
   @Input() classes: ClassModel[];
   @Input() users: User[];
@@ -24,10 +26,12 @@ export class ClassListComponent implements OnInit {
   @Input() assignments: Assignment[];
   @Input() showRegButtons: boolean;
 
-  constructor(private classService: ClassService) { }
+  constructor(private classService: ClassService, private userService: UserService) { }
 
   ngOnInit(): void {
-    console.log('In class list component:', this.classes, this.users, this.courses, this.assignments, this.showRegButtons);
+
+    this.currentUser = this.userService.getCurrentUser();
+   // console.log('In class list component:', this.classes, this.users, this.courses, this.assignments, this.showRegButtons);
     // this.classService.getClasses().subscribe(
     //   data => {
     //     console.log('Got data back from classService', data);

@@ -4,8 +4,6 @@ import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { Http, Response, Headers, RequestOptions } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
 import * as io from 'socket.io-client';
 import { LoomNotificationsService } from './loom.notifications.service';
 import { Globals } from '../globals2';
@@ -38,13 +36,15 @@ export class AnnouncementsService {
   }
 
   getAllAnnouncements(): Observable<any> {
-    return this.http.get<Announcements[]>(this.globals.announcements).do(data => {
-      this.announcementsCount = data.length;
-      this.announcements = data;
-      console.log('Got All announcements: ' + JSON.stringify(data));
-      this.updateIDCount();
-      return data;
-    }).catch(this.handleError);
+    return this.http.get<Announcements[]>(this.globals.announcements);
+
+    // .do(data => {
+    //   this.announcementsCount = data.length;
+    //   this.announcements = data;
+    //   console.log('Got All announcements: ' + JSON.stringify(data));
+    //   this.updateIDCount();
+    //   return data;
+    // }).catch(this.handleError);
   }
 
   getObject(id): Observable<any> {
@@ -52,34 +52,36 @@ export class AnnouncementsService {
     if (id === 0) {
       // get a list of ALL the announcements
       console.log('sending get request for announcements');
-      return this.http.get<Announcements[]>(this.globals.announcements).do(data => {
-        this.announcementsCount = data.length;
-        this.announcements = data;
-        console.log('Got Data back for all announcements: ' + JSON.stringify(data));
-        this.updateIDCount();
-        return data;
-      }).catch(this.handleError);
+      return this.http.get<Announcements[]>(this.globals.announcements);
+
+      // .do(data => {
+      //   this.announcementsCount = data.length;
+      //   this.announcements = data;
+      //   console.log('Got Data back for all announcements: ' + JSON.stringify(data));
+      //   this.updateIDCount();
+      //   return data;
+      // }).catch(this.handleError);
     } else {
-      return this.http.get<Announcements[]>(this.globals.announcements + '?id=' + id)
+      return this.http.get<Announcements[]>(this.globals.announcements + '?id=' + id);
         // debug the flow of data
-        .do(data => { // console.log('All: ' + JSON.stringify(data));
-          const newAnnouncement = data[0];
-          this.announcements.push(newAnnouncement);
-          this.updateIDCount();
-          return data[0];
-          // console.log("Course highest ID: "+ this.highestID);
-        })
-        .catch(this.handleError);
+        // .do(data => { // console.log('All: ' + JSON.stringify(data));
+        //   const newAnnouncement = data[0];
+        //   this.announcements.push(newAnnouncement);
+        //   this.updateIDCount();
+        //   return data[0];
+        //   // console.log("Course highest ID: "+ this.highestID);
+        // })
+        // .catch(this.handleError);
     }
 
   }
 
   getObjects(classId): Observable<any> {
 
-    return this.http.get<Announcements[]>(this.globals.announcements + '?classId=' + classId)
+    return this.http.get<Announcements[]>(this.globals.announcements + '?classId=' + classId);
       // debug the flow of data
-      .do(data => data)
-      .catch(this.handleError);
+      // .do(data => data)
+      // .catch(this.handleError);
 
   }
 
@@ -96,15 +98,16 @@ export class AnnouncementsService {
     // Loop through all the Materials to find the highest ID#
     console.log('upading IDCount');
     if (this.announcements && this.announcements.length > 0) {
-      for (let i = 0; i < this.announcements.length; i++) {
-        const foundID = Number(this.announcements[i].id);
+      this.announcements.forEach( announce => {
+        const foundID = Number(announce.id);
         console.log('Found ID: ' + foundID);
         if (foundID >= this.highestID) {
           const newHigh = foundID + 1;
           this.highestID = newHigh;
           console.log('newHigh == ' + newHigh);
         }
-      }
+      });
+
     } else {
       this.highestID = 1;
 

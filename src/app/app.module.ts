@@ -31,6 +31,12 @@ import { ContactComponent } from './welcome/contact/contact.component';
 import { ContactService } from './services/contact.service';
 import { SignupComponent } from './users/signup/signup.component';
 import { AlertService } from './services/alert.service';
+import { RegisterComponent } from './users/register/register.component';
+import { EnrollmentsService } from './services/enrollments.service';
+import { EnrollmentsResolver } from './resolvers/enrollments.resolver';
+import { AuthGuard } from './services/auth-guard.service';
+import { HomeComponent } from './home/home.component';
+import { ClassComponent } from './classes/class/class.component';
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -41,7 +47,10 @@ import { AlertService } from './services/alert.service';
     WelcomeComponent,
     LoginComponent,
     ContactComponent,
-    SignupComponent
+    SignupComponent,
+    RegisterComponent,
+    HomeComponent,
+    ClassComponent
   ],
   imports: [
     CommonModule,
@@ -58,9 +67,12 @@ import { AlertService } from './services/alert.service';
   ],
   providers: [
     AlertService,
+    AuthGuard,
     ClassService,
     CourseService,
     AssignmentsService,
+    EnrollmentsService,
+    EnrollmentsResolver,
     UserService,
     UsersResolver,
     ContactService,

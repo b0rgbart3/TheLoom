@@ -53,8 +53,13 @@ export class EnrollmentsService {
   }
   // Return the list of student enrollments for the current user
   getEnrollments(): Observable<any> {
+  const user = this.userService.getCurrentUser();
+  if (user) {
     return this.http.get<Enrollment[]>(this.globals.enrollments + '?userId=' +
-      this.userService.getCurrentUser().id);
+      user.userId); } else {
+        return null;
+      }
+
     // .do(data => {
     //   return data;
     // }).catch(this.handleError);

@@ -1,7 +1,8 @@
 <div class='classAd group'>
     <div class='leftCol group'>
         <img [src]='courseimageURL' class='classThumnailImage' *ngIf='courseimageURL'><br clear='all'>
-        <div class='regButton' (click)='register()' *ngIf='showRegButtons'>Register for this class</div>
+        <div class='regButton' (click)='register()' *ngIf='showRegButtons && currentUser'>Register for this class</div>
+        <div class='regButton' (click)='login()' *ngIf='!currentUser'>Login or Sign up to Register for this class</div>
     </div>
     <div class='classDescription'>
     <h1>{{classObject.title}}</h1>

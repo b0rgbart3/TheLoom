@@ -4,65 +4,67 @@ import { Message } from '../models/message.model';
 
 import { Globals } from '../globals2';
 import { LoomNotificationsService } from './loom.notifications.service';
+import { SocketIOClient } from 'socket.io-client';
+
 @Injectable()
 export class ChatSocketService {
   private socket: SocketIOClient.Socket; // The client instance of socket.io
 
   constructor(private myNotes: LoomNotificationsService, private globals: Globals ) {
-    // this.socket = io(globals.chat_server);
-    // this.socket.connect('http://localhost:3101');
+    this.socket = io(globals.chatServer);
+    this.socket.connect('http://localhost:3101');
 
-    // we connected with the chatserver
-    // this.socket.on('chatsocketconnect', (data) => {
-    //   console.log(data.hello); // this worked!!!
-    //   // this.sendNotice();
-    //  // this.sendSocketNotice(data);
-    // });
+   // we connected with the chatserver
+    this.socket.on('chatsocketconnect', (data) => {
+      console.log(data.hello); // this worked!!!
+      // this.sendNotice();
+     // this.sendSocketNotice(data);
+    });
 
-    // // respond to broadcast messages from the chatserver
-    // this.socket.on('message', (data) => {
-    //   console.log(data);
-    //   this.sendSocketNotice(data);
-    // });
+    // respond to broadcast messages from the chatserver
+    this.socket.on('message', (data) => {
+      console.log(data);
+      this.sendSocketNotice(data);
+    });
   }
 
 
-  // sendNotice() {
-  //   this.myNotes.add(<Notification> {type: 'success', message: 'New Client joined the Chat!'});
-  // }
-  // sendSocketNotice(data) {
-  //   this.myNotes.add(<Notification> {type: 'info', message: data});
-  // }
+  sendNotice(): void {
+    this.myNotes.add( {type: 'success', message: 'New Client joined the Chat!'});
+  }
+  sendSocketNotice(data): void {
+    this.myNotes.add(<Notification> {type: 'info', message: data});
+  }
 
-  // introduceMyself(user, classID) {
-  //   this.sendSocketNotice('Welcome to the chatroom, ' + user.username);
-  //   this.socket.emit('enter', user, classID);
-  // }
-  // Emit: message saved event
-  // emitEventOnMessageSaved(messageSaved) {
-  //     this.socket.emit('messageSaved', messageSaved);
-  // }
+  introduceMyself(user, classID) {
+    this.sendSocketNotice('Welcome to the chatroom, ' + user.username);
+    this.socket.emit('enter', user, classID);
+  }
+  Emit: message saved event
+  emitEventOnMessageSaved(messageSaved) {
+      this.socket.emit('messageSaved', messageSaved);
+  }
 
-  // // Emit: message updated event
-  // emitEventOnMessageUpdated(messageUpdated) {
-  //   this.socket.emit('MessageUpdated', messageUpdated);
-  // }
+  // Emit: message updated event
+  emitEventOnMessageUpdated(messageUpdated) {
+    this.socket.emit('MessageUpdated', messageUpdated);
+  }
 
-  // // Consume: on message saved
-  // consumeEventOnGistSaved() {
-  //   const self = this;
-  //   this.socket.on('messageSaved', function(message: Message){
-  //     // self.toasterService.pop('success', 'NEW MESSAGE SAVED',
-  //     //     'A message with title \"' + message.message );
-  //   });
-  // }
+  // Consume: on message saved
+  consumeEventOnGistSaved() {
+    const self = this;
+    this.socket.on('messageSaved', function(message: Message){
+      // self.toasterService.pop('success', 'NEW MESSAGE SAVED',
+      //     'A message with title \"' + message.message );
+    });
+  }
 
-  // // Consume on message updated
-  // consumeEventOnMessageUpdated() {
-  //   const self = this;
-  //   this.socket.on('messageUpdated', function(message: Message){
-  //     // self.toasterService.pop('info', 'MESSAGE UPDATED',
-  //     //     'A message with title \"' + message.message + '\" has just been updated');
-  //   });
-  // }
+  // Consume on message updated
+  consumeEventOnMessageUpdated() {
+    const self = this;
+    this.socket.on('messageUpdated', function(message: Message){
+      // self.toasterService.pop('info', 'MESSAGE UPDATED',
+      //     'A message with title \"' + message.message + '\" has just been updated');
+    });
+  }
 }

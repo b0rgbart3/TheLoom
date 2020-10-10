@@ -8,7 +8,7 @@ import { Userthumbnail } from '../../models/userthumbnail.model';
 import { DiscussionSettings } from '../../models/discussionsettings.model';
 import { DiscussionService } from '../../services/discussion.service';
 import { EnrollmentsService } from '../../services/enrollments.service';
-import { ClickOutsideDirective } from '../../directives/clickOutside.directive';
+import { ClickOutsideDirective } from '../../directives/clickoutside.directive';
 
 @Component({
 
