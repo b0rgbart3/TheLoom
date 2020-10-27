@@ -154,6 +154,7 @@ export class ClassComponent implements OnInit {
         this.assignmentsService.getAssignmentsInClass(this.classID).subscribe(
             data => {
                 this.assignments = data;
+                console.log('Assignments: ', this.assignments);
                 this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
 
                 console.log('This class Instructors: ', this.instructors);
@@ -288,15 +289,17 @@ export class ClassComponent implements OnInit {
 
     createInstructorThumbnail(user): any {
         console.log('Creating instructor thumbnail:', user);
-        if (user.userId === this.currentUser.userId) {
-            this.currentUserIsInstructor = true;
+        if (user) {
+            if (user.userId === this.currentUser.userId) {
+                this.currentUserIsInstructor = true;
+            }
+            const thumbnailObj = {
+                user, userId: user.userId, online: false,
+                size: 100, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
+            };
+            console.log('Thumbnail: ', thumbnailObj);
+            return thumbnailObj;
         }
-        const thumbnailObj = {
-            user, userId: user.userId, online: false,
-            size: 100, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
-        };
-        console.log('Thumbnail: ', thumbnailObj);
-        return thumbnailObj;
     }
 
     createStudentThumbnail(user): any {

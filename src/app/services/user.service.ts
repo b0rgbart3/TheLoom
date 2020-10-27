@@ -242,6 +242,8 @@ export class UserService {
 
 
   getUserFromMemoryById(queryId: string): User {
+
+    console.log('In User Service looking for a user by id of: ', queryId);
     let foundUser = null;
     if (this.hasUsers()) {
       foundUser = this.users.find(user => user.userId === queryId);
