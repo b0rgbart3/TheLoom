@@ -1,21 +1,29 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { Course } from '../models/course.model';
+
+import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { ContentChart } from '../models/contentchart.model';
-import { ClassService } from '../services/class.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { Material } from '../models/material.model';
+import { catchError } from 'rxjs/operators';
+import { DataError } from '../models/dataerror.model';
 import { MaterialService } from '../services/material.service';
 
-@Injectable()
-export class AllMaterialsResolver implements Resolve <any[]> {
+@Injectable({
+    providedIn: 'root'
+  })
 
-    constructor( private materialService: MaterialService, private router: Router ) { }
+export class AllMaterialsResolver implements Resolve <Material[] | DataError> {
 
-    resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable <any[]> {
+    constructor(
+        private materialService: MaterialService ) { }
+
+    resolve( route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable <Material[] | DataError> {
 
 
        //  console.log('In the materials-resolver');
-        return this.materialService.getMaterials();
+        return this.materialService.getMaterials()
+        .pipe(
+            catchError(err => of(err))
+        );
 
     //     map(materials => { if (materials) { return materials; }
     //     console.log(`Materials were not found`);

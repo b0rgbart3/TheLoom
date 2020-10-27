@@ -58,13 +58,13 @@ export class ClassService {
   }
 
   getClassFromMemory(queryID): ClassModel {
-    // console.log('In getClassFromMemory method: ' + this.classes);
+    console.log('In getClassFromMemory method, looking for: ', queryID, 'in: ',  this.classes);
 
     if (this.classes) {
       // console.log('looking: ' + this.classes.length);
 
-      this.classes.filter(classObject => classObject.id === queryID);
-
+      const found = this.classes.filter(classObject => classObject.classId + '' === queryID);
+      return found[0];
     }
     return null;
   }

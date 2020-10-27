@@ -31,7 +31,7 @@ export class ClassListComponent implements OnInit {
   ngOnInit(): void {
 
     this.currentUser = this.userService.getCurrentUser();
-   // console.log('In class list component:', this.classes, this.users, this.courses, this.assignments, this.showRegButtons);
+    console.log('In class list component:', this.classes, this.users, this.courses, this.assignments, this.showRegButtons);
     // this.classService.getClasses().subscribe(
     //   data => {
     //     console.log('Got data back from classService', data);

@@ -50,17 +50,25 @@ const loomRoutes: Routes = [
   {
     path: 'classes/:id', canActivate: [AuthGuard], resolve: {
       allDSObjects: AllDiscussionSettingsResolver,
-      thisClass: ClassesResolver, users: UsersResolver, assignments: AssignmentsResolver,
-      enrollments: EnrollmentsResolver, allMaterials: AllMaterialsResolver, courses: CoursesResolver, messages: MessagesResolver,
+      thisClass: ClassesResolver,
+      users: UsersResolver,
+      assignments: AssignmentsResolver,
+      enrollments: EnrollmentsResolver,
+      allMaterials: AllMaterialsResolver,
+      courses: CoursesResolver,
+      messages: MessagesResolver,
       discussionSettings: DiscussionSettingsResolver
     },
     children: [{
       path: ':id2', pathMatch: 'full', component: ClassComponent,
       resolve: {
-        allAnnouncements: AllAnnouncementsResolver, announcements: AnnouncementsResolver,
-        thisCourse: ClassCourseResolver, classMaterials: MaterialsResolver,
+        allAnnouncements: AllAnnouncementsResolver,
+        announcements: AnnouncementsResolver,
+        thisCourse: ClassCourseResolver,
+        classMaterials: MaterialsResolver,
         discussionSettings: DiscussionSettingsResolver,
-        notesSettings: NotesSettingsResolver, messages: MessagesResolver
+        notesSettings: NotesSettingsResolver,
+        messages: MessagesResolver
       }
     }]
   },

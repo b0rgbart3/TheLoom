@@ -41,7 +41,13 @@ import { MessageService } from './services/message.service';
 import { LoomNotificationsService } from './services/loom.notifications.service';
 import { MessagesResolver } from './resolvers/messages-resolver';
 import { DiscussionService } from './services/discussion.service';
+import { AnnouncementsService } from './services/announcements.service';
 import { AssignmentsResolver } from './resolvers/assignments.resolver';
+import { MaterialService } from './services/material.service';
+import { DiscussionSettingsResolver } from './resolvers/discussion-settings-resolver';
+import { AnnouncementsResolver } from './resolvers/announcements.resolver';
+import { ClassCourseResolver } from './resolvers/class-course.resolver';
+
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
 // import { ClassListComponent } from './classes/class-list/class-list.component';
@@ -77,14 +83,20 @@ import { AssignmentsResolver } from './resolvers/assignments.resolver';
     CourseService,
     AssignmentsService,
     AssignmentsResolver,
+    ClassCourseResolver,
     EnrollmentsService,
     EnrollmentsResolver,
+    DiscussionSettingsResolver,
+    AnnouncementsService,
+    AnnouncementsResolver,
+    AnnouncementsResolver,
     UserService,
     UsersResolver,
     LoomNotificationsService,
     ContactService,
     MessageService,
     MessagesResolver,
+    MaterialService,
     DiscussionService,
     Globals,
     HttpCacheService,

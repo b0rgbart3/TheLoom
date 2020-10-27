@@ -24,6 +24,7 @@ import { AssignmentsService } from '../services/assignments.service';
 
 export class HomeComponent implements OnInit {
 
+    currentUser: User;
     errorMessage: string;
     showTaking: boolean;
     showTeaching: boolean;
@@ -60,6 +61,7 @@ export class HomeComponent implements OnInit {
         this.showTeaching = false;
         this.takingLabel = 'tabLabelChosen';
         this.teachingLabel = 'tabLabel';
+        this.currentUser = this.userService.getCurrentUser();
 
         const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
         const resolvedClassData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
@@ -129,7 +131,7 @@ export class HomeComponent implements OnInit {
         } else {
             this.classesTaking = null;
         }
-        //   console.log('TAKING: ' + JSON.stringify(this.classesTaking));
+        console.log('TAKING: ' + JSON.stringify(this.classesTaking));
 
         // this.assignments = this.activatedRoute.snapshot.data.assignments;
         // const resolvedAssignmentData: Assignment[] | DataError = this.activatedRoute.snapshot.data[`resolvedAssignments`];
@@ -152,10 +154,11 @@ export class HomeComponent implements OnInit {
         if (this.classesTeachingIDList && this.classesTeachingIDList.length > 0) {
             this.classesTeachingIDList.forEach((classID) =>
              {
-                 const foundClass = this.classes.filter( classObject => {
+                this.classes.filter( classObject => {
                     if (classObject.classId === classID) {
                  this.classesTeaching.push( classObject ); }
                     });
+
             });
         } else {
             this.classesTeaching = null;
@@ -207,7 +210,7 @@ export class HomeComponent implements OnInit {
 
     goto(queryID): void {
         const queryString = '/classes/' + queryID + '/0';
-        //       console.log('Routing to: ' + queryString );
+        console.log('Routing to: ' + queryString );
         this.router.navigate([queryString]);
     }
 }

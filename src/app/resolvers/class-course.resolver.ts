@@ -4,9 +4,11 @@ import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router, Activated
 import { ContentChart } from '../models/contentchart.model';
 import { CourseService } from '../services/course.service';
 import { ClassService } from '../services/class.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { ClassModel } from '../models/classModel.model';
+import { DataError } from '../models/dataerror.model';
 
 /*
  *
@@ -16,8 +18,10 @@ import { ClassModel } from '../models/classModel.model';
  *  from the URl.
  */
 
-@Injectable()
-export class ClassCourseResolver implements Resolve <any> {
+@Injectable({
+  providedIn: 'root'
+})
+export class ClassCourseResolver implements Resolve <ClassModel | DataError> {
 
     thisClass: ClassModel;
     thisCourse: Course;
@@ -31,7 +35,10 @@ export class ClassCourseResolver implements Resolve <any> {
        // console.log('In the class-course resolver.');
         const thisClass = route.parent.data.thisClass;
        // console.log('Activated route snapshot ClassObject: ' + JSON.stringify(thisClass));
-        return this.courseService.getCourse(thisClass.course);
+        return this.courseService.getCourse(thisClass.course)
+        .pipe(
+          catchError(err => of(err))
+        );
 
       //   .map( thisCourse => { if (thisCourse[0]) {
       //     this.thisCourse = thisCourse[0];
