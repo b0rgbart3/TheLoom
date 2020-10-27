@@ -13,13 +13,14 @@ import { AppRoutingModule } from '../app-routing.module';
 import { RouterModule } from '@angular/router';
 import { ClickOutsideDirective } from '../directives/clickoutside.directive';
 import { BiopopComponent } from '../classes/class/biopop.component';
-
-
+import { ClassComponent } from '../classes/class/class.component';
+import { SectionComponent } from '../courses/course/section.component';
 
 @NgModule ( {
     imports: [
         FormsModule, ReactiveFormsModule,
         MatMenuModule,
+        CommonModule,
         MatIconModule,
         RouterModule,
         BrowserModule,
@@ -31,6 +32,7 @@ import { BiopopComponent } from '../classes/class/biopop.component';
         NavBarComponent,
         ClickOutsideDirective,
         BiopopComponent,
+
     ],
     providers: [
         FormsModule, ReactiveFormsModule,
@@ -38,6 +40,7 @@ import { BiopopComponent } from '../classes/class/biopop.component';
         MatIconModule,
         RouterModule,
         BrowserModule,
+        CommonModule
     ],
     exports: [
         ClassListComponent,

@@ -36,7 +36,7 @@ import { EnrollmentsService } from './services/enrollments.service';
 import { EnrollmentsResolver } from './resolvers/enrollments.resolver';
 import { AuthGuard } from './services/auth-guard.service';
 import { HomeComponent } from './home/home.component';
-import { ClassComponent } from './classes/class/class.component';
+
 import { MessageService } from './services/message.service';
 import { LoomNotificationsService } from './services/loom.notifications.service';
 import { MessagesResolver } from './resolvers/messages-resolver';
@@ -49,6 +49,8 @@ import { AnnouncementsResolver } from './resolvers/announcements.resolver';
 import { ClassCourseResolver } from './resolvers/class-course.resolver';
 import { NotesService } from './services/notes.service';
 import { NotesSettingsResolver } from './resolvers/notes-settings.resolver';
+import { ClassComponent } from './classes/class/class.component';
+import { SectionComponent } from './courses/course/section.component';
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -63,7 +65,8 @@ import { NotesSettingsResolver } from './resolvers/notes-settings.resolver';
     SignupComponent,
     HomeComponent,
     RegisterComponent,
-    ClassComponent
+    ClassComponent,
+    SectionComponent,
   ],
   imports: [
     CommonModule,

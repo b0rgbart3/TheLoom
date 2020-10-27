@@ -16,12 +16,13 @@ import { Globals } from '../../globals2';
 import { MaterialCollection } from '../../models/materialcollection.model';
 import { DiscussionSettings } from '../../models/discussionsettings.model';
 import { DiscussionService } from '../../services/discussion.service';
+import { Enrollment } from '../../models/enrollment.model';
 import { EnrollmentsService } from '../../services/enrollments.service';
 import { NotesSettings } from '../../models/notessettings.model';
 import { ClickOutsideDirective } from '../../directives/clickoutside.directive';
 import { MessageService } from '../../services/message.service';
 import { AssignmentsService } from '../../services/assignments.service';
-import { Enrollment } from '../../models/enrollment.model';
+
 import { Assignment } from '../../models/assignment.model';
 import { MaterialSet } from '../../models/materialset.model';
 import { Announcements } from '../../models/announcements.model';
@@ -125,37 +126,44 @@ export class ClassComponent implements OnInit {
             this.discussionSettings = this.activatedRoute.snapshot.data.discussionSettings;
             this.notesSettings = this.activatedRoute.snapshot.data.notesSettings;
             this.announcements = this.activatedRoute.snapshot.data.announcements;
+            this.currentCourse = this.activatedRoute.snapshot.data.thisCourse[0];
+            console.log('this CurrentCourse: ', this.currentCourse);
             console.log('Announcements: ' + this.announcements.length);
             this.currentUser = this.userService.getCurrentUser();
-            console.log('This happens next');
         });
 
-        this.activatedRoute.parent.data.subscribe(
-            data => { this.onDataRetrieved(data.thisClass); }
-        );
+        // this.activatedRoute.parent.data.subscribe(
+        //     data => { this.onDataRetrieved(data.thisClass); }
+        // );
 
         if (!this.sectionNumber) { this.sectionNumber = 0; }
 
         this.studentIDList = [];
-        this.enrollmentsService.getEnrollmentsInClass(this.thisClass.id).subscribe(
+        console.log('THIS CLASS ID:', this.classID);
+        console.log('THIS CLASS IS: ', this.thisClass);
+        console.log('this CurrentCourse: ', this.currentCourse);
+        this.enrollmentsService.getEnrollmentsInClass(this.classID).subscribe(
             data => {
                 this.enrollments = data;
-               // this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
+                this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
                 this.studentThumbnails = this.students.map(student =>
                     this.createStudentThumbnail(student));
             }, err => { console.log('error getting enrollments'); });
 
         this.instructorIDList = [];
-        this.assignmentsService.getAssignmentsInClass(this.thisClass.id).subscribe(
+        this.assignmentsService.getAssignmentsInClass(this.classID).subscribe(
             data => {
                 this.assignments = data;
-               // this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+                this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+
+                console.log('This class Instructors: ', this.instructors);
                 this.instructorThumbnails = this.instructors.map(
                     instructor => this.createInstructorThumbnail(instructor));
             }, err => { console.log('error getting assignments'); });
 
-        this.currentCourse = this.activatedRoute.snapshot.data.thisCourse;
-        this.courseimageURL = this.globals.courseimages + '/' + this.currentCourse.id
+       // this.currentCourse = this.activatedRoute.snapshot.data.thisCourse;
+        console.log('CurrentCourse: ', this.currentCourse);
+        this.courseimageURL = this.globals.courseimages + '/' + this.currentCourse.courseId
             + '/' + this.currentCourse.image;
 
         this.classMaterials = this.activatedRoute.snapshot.data.classMaterials;
@@ -279,20 +287,22 @@ export class ClassComponent implements OnInit {
     }
 
     createInstructorThumbnail(user): any {
-        if (user.id === this.currentUser.id) {
+        console.log('Creating instructor thumbnail:', user);
+        if (user.userId === this.currentUser.userId) {
             this.currentUserIsInstructor = true;
         }
         const thumbnailObj = {
-            user, userId: user.id, online: false,
+            user, userId: user.userId, online: false,
             size: 100, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
         };
+        console.log('Thumbnail: ', thumbnailObj);
         return thumbnailObj;
     }
 
     createStudentThumbnail(user): any {
         if (user) {
             const thumbnailObj = {
-                user, userId: user.id, online: false,
+                user, userId: user.userId, online: false,
                 size: 60, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
             };
             return thumbnailObj;
