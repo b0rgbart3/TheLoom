@@ -1,18 +1,21 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { Course } from '../models/course.model';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { ClassService } from '../services/class.service';
 import { UserService } from '../services/user.service';
 import { NotesSettings } from '../models/notessettings.model';
 import { NotesService } from '../services/notes.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { DataError } from '../models/dataerror.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+  })
 
-export class NotesSettingsResolver implements Resolve <NotesSettings> {
+export class NotesSettingsResolver implements Resolve <NotesSettings | DataError> {
 
     constructor(
         private notesService: NotesService,
@@ -27,7 +30,10 @@ export class NotesSettingsResolver implements Resolve <NotesSettings> {
    //     console.log('In the notes settings resolver - class: ' + class_id +
    //         ', section: ' + section + ', user: ' + user_id);
 
-        return this.notesService.getNotesSettings(userId, classId, section);
+        return this.notesService.getNotesSettings(userId, classId, section)
+        .pipe(
+            catchError(err => of(err))
+          );
     //     .
     //     map(nsObject => { if (nsObject) {
     //      //   console.log('found existing ns object.');

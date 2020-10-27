@@ -47,6 +47,8 @@ import { MaterialService } from './services/material.service';
 import { DiscussionSettingsResolver } from './resolvers/discussion-settings-resolver';
 import { AnnouncementsResolver } from './resolvers/announcements.resolver';
 import { ClassCourseResolver } from './resolvers/class-course.resolver';
+import { NotesService } from './services/notes.service';
+import { NotesSettingsResolver } from './resolvers/notes-settings.resolver';
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -93,6 +95,8 @@ import { ClassCourseResolver } from './resolvers/class-course.resolver';
     UserService,
     UsersResolver,
     LoomNotificationsService,
+    NotesService,
+    NotesSettingsResolver,
     ContactService,
     MessageService,
     MessagesResolver,

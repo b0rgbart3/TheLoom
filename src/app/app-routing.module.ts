@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 // import { ClassListComponent } from '../app/classes/class-list/class-list.component';
 import { ClassService } from '../app/services/class.service';
 import { WelcomeComponent } from '../app/welcome/welcome.component';
-// import { ClassesResolver } from './resolvers/classes-resolver.service';
 import { UsersResolver } from './resolvers/users.resolver';
 import { CoursesResolver } from './resolvers/courses.resolver';
 import { ClassesResolver } from './resolvers/classes.resolver';
@@ -50,7 +49,7 @@ const loomRoutes: Routes = [
   {
     path: 'classes/:id', canActivate: [AuthGuard], resolve: {
       allDSObjects: AllDiscussionSettingsResolver,
-      thisClass: ClassesResolver,
+      classes: ClassesResolver,
       users: UsersResolver,
       assignments: AssignmentsResolver,
       enrollments: EnrollmentsResolver,

@@ -33,8 +33,10 @@ export class ClassCourseResolver implements Resolve <ClassModel | DataError> {
     resolve( route: ActivatedRouteSnapshot): Observable <any> {
 
        // console.log('In the class-course resolver.');
-        const thisClass = route.parent.data.thisClass;
-       // console.log('Activated route snapshot ClassObject: ' + JSON.stringify(thisClass));
+        const thisClassId = this.activatedRoute.snapshot.params.id;
+        console.log('Activated class ID: ', thisClassId);
+        const thisClass = route.parent.data.classes;
+        console.log('Activated route snapshot ClassObject: ', thisClass);
         return this.courseService.getCourse(thisClass.course)
         .pipe(
           catchError(err => of(err))

@@ -116,7 +116,10 @@ export class ClassComponent implements OnInit {
 
             // Grab the data from the Route
             this.classID = this.activatedRoute.snapshot.params.id;
-            this.thisClass = this.activatedRoute.snapshot.data.thisClass;
+            console.log('THIS CLASS ID:', this.classID);
+            this.classes = this.activatedRoute.snapshot.data.classes;
+            this.thisClass = this.classes.filter( aClass => aClass.classId === this.classID)[0];
+            console.log('THIS CLASS IS: ', this.thisClass);
             this.users = this.activatedRoute.snapshot.data.users;
             this.sectionNumber = this.activatedRoute.snapshot.params.id2;
             this.discussionSettings = this.activatedRoute.snapshot.data.discussionSettings;
