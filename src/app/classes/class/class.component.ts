@@ -169,6 +169,7 @@ export class ClassComponent implements OnInit {
             dataError = true;
         } else {
             this.enrollments = resolvedEnrollmentData;
+            console.log('All Enrollments:', this.enrollments);
             this.enrollmentsService.takeInResolvedData(this.enrollments);
         }
 
@@ -179,7 +180,7 @@ export class ClassComponent implements OnInit {
             dataError = true;
         } else {
             this.materials = resolvedMaterialData;
-            console.log('This Materials', this.materials);
+           //  console.log('This Materials', this.materials);
             this.materialService.takeInResolvedData(this.materials);
         }
 
@@ -229,7 +230,7 @@ export class ClassComponent implements OnInit {
             dataError = true;
         } else {
             this.currentCourse = resolvedCurrentCourse[0];
-            console.log('This currentCourse: ', this.currentCourse);
+          //  console.log('This currentCourse: ', this.currentCourse);
           //  this.announcementsService.takeInResolvedData(this.announcements);
         }
 
@@ -250,12 +251,35 @@ export class ClassComponent implements OnInit {
 
 
 
-        this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+        // this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+
+        // console.log('In the instructors resolver, classID:', thisClassId);
+        const assignments = this.assignmentsService.getAssignmentsForClass(this.thisClass.classId);
+
+        console.log('found assignments:', assignments);
+        const instructorIds = assignments.map( (inst) => inst.userId);
+        console.log('instructor ids:', instructorIds);
+      //  const thisClass = this.classService.getClass(thisClassId);
+
+        // console.log('Activated class ID: ', thisClassId);
+        // const thisClass = route.parent.data.classes.filter( aClass => aClass.classId === thisClassId)[0];
+        const instructors = [];
+        instructorIds.forEach( (inst) => {
+         const instructor = this.userService.getUserFromMemoryById(inst);
+         instructors.push(instructor);
+        });
+        this.instructors = instructors;
+
         this.instructorThumbnails = this.instructors.map(
               instructor => this.createInstructorThumbnail(instructor));
 
         this.studentIDList = [];
-        this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
+        console.log('Enrollments: ', this.enrollments);
+
+        this.students = this.enrollments.filter( (enr) => enr.classId === this.thisClass.classId)
+        .map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
+
+        console.log('Student list: ', this.students);
         this.studentThumbnails = this.students.map(student =>
                     this.createStudentThumbnail(student));
         // this.activatedRoute.params.subscribe(params => {
@@ -437,7 +461,7 @@ export class ClassComponent implements OnInit {
     }
 
     createInstructorThumbnail(user): any {
-      //  console.log('Creating instructor thumbnail:', user);
+        console.log('Creating instructor thumbnail:', user);
         if (user) {
             if (user.userId === this.currentUser.userId) {
                 this.currentUserIsInstructor = true;

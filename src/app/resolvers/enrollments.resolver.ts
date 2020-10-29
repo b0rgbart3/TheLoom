@@ -23,7 +23,7 @@ export class EnrollmentsResolver implements Resolve<Enrollment[] | DataError> {
         // Angular automatially subscribes to this get request
         // because it is in a "Resolver".
 
-        return this.enrollmentsService.getEnrollments()
+        return this.enrollmentsService.getAllEnrollments()
             .pipe(
                 catchError(err => of(err))
             );

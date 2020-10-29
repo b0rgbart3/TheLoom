@@ -57,12 +57,12 @@ export class SectionComponent implements OnInit, OnChanges {
         // console.log('sectionNumber: ' + this.section);
         // this.section = this.course.sections[this.sectionNumber];
         // this.materialRefs = this.section.materials;
-        this.loadInMaterials();
+       // this.loadInMaterials();
     }
 
     ngOnChanges(): void {
         // console.log('changes');
-        this.loadInMaterials();
+     //   this.loadInMaterials();
      }
 
     loadInMaterials(): void {
@@ -73,7 +73,7 @@ export class SectionComponent implements OnInit, OnChanges {
 
                     this.materialService.getMaterial(id).subscribe(
                         ( mat ) => {
-                        console.log('found a material ',  mat[0]);
+                  //      console.log('found a material ',  mat[0]);
                         this.materials.push(mat[0]);
 
                 });

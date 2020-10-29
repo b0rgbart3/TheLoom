@@ -1,0 +1,11 @@
+{
+    "_id" : ObjectId("5a31cac49e9101160f167dba"),
+    "title" : "Divination",
+    "course" : "3",
+    "start" : "2017-12-18T08:00:00.000Z",
+    "end" : "2017-12-29T08:00:00.000Z",
+    "classId" : "8",
+    "cost" : "600",
+    "costBlurb" : "The cost of this class is $600 (US).  You can pay via PayPal or Venmo (see buttons below), or you can send a check to:  The Reclaiming Loom, 3054 25th Street, San Francisco, CA 94110, and make the check payable to The Reclaiming Loom.  Thank you!  Welcome to Mirror Work.",
+    "timestamp" : NumberLong(1522426758681)
+}

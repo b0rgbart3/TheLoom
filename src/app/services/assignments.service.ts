@@ -24,6 +24,14 @@ export class AssignmentsService {
 
   constructor(private http: HttpClient, private globals: Globals, private userService: UserService) { }
 
+  getAssignmentsForClass( classId: string): Assignment[] {
+    if (this.assignments) {
+      const assignmentsForClass = this.assignments.filter( (asmnt) => asmnt.classId === classId);
+      return assignmentsForClass;
+    } else {
+      return null;
+    }
+  }
 
   takeInResolvedData( assignments: Assignment[]): void {
     this.assignments = assignments;
