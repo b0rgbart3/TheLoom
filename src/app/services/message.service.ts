@@ -54,6 +54,11 @@ export class MessageService {
     });
   }
 
+  takeInResolvedData(messages: Message[]): void {
+    this.messages = messages;
+  }
+
+
 
   gethighestID(): string {
     this.updateIDCount();

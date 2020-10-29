@@ -24,6 +24,8 @@ import { NotesSettingsResolver } from './resolvers/notes-settings.resolver';
 import { AnnouncementsResolver } from './resolvers/announcements.resolver';
 import { ClassCourseResolver } from './resolvers/class-course.resolver';
 import { MaterialsResolver } from './resolvers/materials-resolver';
+import { DiscussionService } from './services/discussion.service';
+import { AnnouncementsService } from './services/announcements.service';
 
 const loomRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -48,26 +50,39 @@ const loomRoutes: Routes = [
 
   {
     path: 'classes/:id', canActivate: [AuthGuard], resolve: {
-      allDSObjects: AllDiscussionSettingsResolver,
       classes: ClassesResolver,
-      users: UsersResolver,
-      assignments: AssignmentsResolver,
-      enrollments: EnrollmentsResolver,
-      allMaterials: AllMaterialsResolver,
       courses: CoursesResolver,
-      messages: MessagesResolver,
-      discussionSettings: DiscussionSettingsResolver
     },
     children: [{
       path: ':id2', pathMatch: 'full', component: ClassComponent,
       resolve: {
-        allAnnouncements: AllAnnouncementsResolver,
-        announcements: AnnouncementsResolver,
-        thisCourse: ClassCourseResolver,
-        classMaterials: MaterialsResolver,
-        discussionSettings: DiscussionSettingsResolver,
-        notesSettings: NotesSettingsResolver,
-        messages: MessagesResolver
+        resolvedUsers: UsersResolver,
+        resolvedClasses: ClassesResolver,
+        resolvedAssignments: AssignmentsResolver,
+        resolvedEnrollments: EnrollmentsResolver,
+        resolvedMaterials: MaterialsResolver,
+        resolvedCourses: CoursesResolver,
+        resolvedMessages: MessagesResolver,
+        resolvedDiscussionSettings: DiscussionSettingsResolver,
+        resolvedAnnouncements: AnnouncementsResolver,
+        resolvedCurrentCourse: ClassCourseResolver,
+        resolvedNotesSettings: NotesSettingsResolver,
+
+
+        // allDSObjects: AllDiscussionSettingsResolver,
+        // classes: ClassesResolver,
+        // users: UsersResolver,
+        // assignments: AssignmentsResolver,
+        // enrollments: EnrollmentsResolver,
+        // allMaterials: AllMaterialsResolver,
+        // courses: CoursesResolver,
+        // messages: MessagesResolver,
+        // discussionSettings: DiscussionSettingsResolver,
+        // allAnnouncements: AllAnnouncementsResolver,
+        // announcements: AnnouncementsResolver,
+        // thisCourse: ClassCourseResolver,
+        // classMaterials: MaterialsResolver,
+        // notesSettings: NotesSettingsResolver,
       }
     }]
   },

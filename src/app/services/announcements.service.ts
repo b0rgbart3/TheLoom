@@ -35,6 +35,11 @@ export class AnnouncementsService {
 
   }
 
+  takeInResolvedData(announcements: Announcements[]): void {
+    this.announcements = announcements;
+  }
+
+
   getAllAnnouncements(): Observable<any> {
     return this.http.get<Announcements[]>(this.globals.announcements);
 

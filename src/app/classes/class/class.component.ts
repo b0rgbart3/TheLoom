@@ -25,8 +25,10 @@ import { AssignmentsService } from '../../services/assignments.service';
 
 import { Assignment } from '../../models/assignment.model';
 import { MaterialSet } from '../../models/materialset.model';
+import { Message } from '../../models/message.model';
 import { Announcements } from '../../models/announcements.model';
 import { AnnouncementsService } from '../../services/announcements.service';
+import { DataError } from 'src/app/models/dataerror.model';
 
 @Component({
 
@@ -42,6 +44,7 @@ export class ClassComponent implements OnInit {
     thisClass: ClassModel;
     errorMessage: string;
     classes: ClassModel[];
+    courses: Course[];
     currentCourse: Course;
     courseMaterials: Material[];
     courseimageURL: string;
@@ -52,6 +55,7 @@ export class ClassComponent implements OnInit {
     instructorIDList: string[];
     instructorCount = 0;
     studentCount = 0;
+    messages: Message[];
     materials = [];
     sectionNumber: number;
     section: Section;
@@ -66,7 +70,7 @@ export class ClassComponent implements OnInit {
     currentUserIsInstructor: boolean;
     COURSE_IMAGE_PATH: string;
     AVATAR_IMAGE_PATH: string;
-    discussionSettings: DiscussionSettings;
+    discussionSettings: DiscussionSettings[];
     classMaterials: Material[];
     notesSettings: NotesSettings;
     messaging: boolean;
@@ -107,30 +111,172 @@ export class ClassComponent implements OnInit {
 
     ngOnInit(): void {
 
+        this.classID = this.activatedRoute.snapshot.params.id;
         this.currentMaterials = null;
         this.messaging = false;
         this.currentUser = this.userService.getCurrentUser();
         this.currentUserIsInstructor = false;
 
-        this.activatedRoute.params.subscribe(params => {
-            this.onSectionChange(params.id2);
 
-            // Grab the data from the Route
-            this.classID = this.activatedRoute.snapshot.params.id;
-            console.log('THIS CLASS ID:', this.classID);
-            this.classes = this.activatedRoute.snapshot.data.classes;
+        // GRAB ALL THE DATA FROM THE ROUTE RESOLVER..... DUH
+
+        // allDSObjects: AllDiscussionSettingsResolver,
+       // this.classes = this.activatedRoute.snapshot.data.classes;
+
+
+        // if (this.classes instanceof DataError) {
+        //     console.log('No Class Data...');
+        // }
+
+       // this.users = this.activatedRoute.snapshot.data.users;
+        const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
+
+        let dataError = false;
+        if (resolvedUserData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedUserData}`);
+            dataError = true;
+        } else {
+            this.users = resolvedUserData;
+            this.userService.takeInResolvedData(this.users);
+        }
+
+        const resolvedClassesData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
+
+
+        if (resolvedClassesData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedClassesData}`);
+            dataError = true;
+        } else {
+            this.classes = resolvedClassesData;
+            this.classService.takeInResolvedData(this.classes);
             this.thisClass = this.classes.filter( aClass => aClass.classId === this.classID)[0];
-            console.log('THIS CLASS IS: ', this.thisClass);
-            this.users = this.activatedRoute.snapshot.data.users;
-            this.sectionNumber = this.activatedRoute.snapshot.params.id2;
-            this.discussionSettings = this.activatedRoute.snapshot.data.discussionSettings;
-            this.notesSettings = this.activatedRoute.snapshot.data.notesSettings;
-            this.announcements = this.activatedRoute.snapshot.data.announcements;
-            this.currentCourse = this.activatedRoute.snapshot.data.thisCourse[0];
-            console.log('this CurrentCourse: ', this.currentCourse);
-            console.log('Announcements: ' + this.announcements.length);
-            this.currentUser = this.userService.getCurrentUser();
-        });
+        }
+
+        const resolvedAssignmentData: Assignment[] | DataError = this.activatedRoute.snapshot.data[`resolvedAssignments`];
+
+        if (resolvedAssignmentData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedAssignmentData}`);
+            dataError = true;
+        } else {
+            this.assignments = resolvedAssignmentData;
+            this.assignmentsService.takeInResolvedData(this.assignments);
+        }
+
+        const resolvedEnrollmentData: Enrollment[] | DataError = this.activatedRoute.snapshot.data[`resolvedEnrollments`];
+
+        if (resolvedEnrollmentData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedEnrollmentData}`);
+            dataError = true;
+        } else {
+            this.enrollments = resolvedEnrollmentData;
+            this.enrollmentsService.takeInResolvedData(this.enrollments);
+        }
+
+        const resolvedMaterialData: Material[] | DataError = this.activatedRoute.snapshot.data[`resolvedEnrollments`];
+
+        if (resolvedMaterialData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedMaterialData}`);
+            dataError = true;
+        } else {
+            this.materials = resolvedMaterialData;
+            console.log('This Materials', this.materials);
+            this.materialService.takeInResolvedData(this.materials);
+        }
+
+        const resolvedCourseData: Course[] | DataError = this.activatedRoute.snapshot.data[`resolvedCourses`];
+
+        if (resolvedCourseData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedCourseData}`);
+            dataError = true;
+        } else {
+            this.courses = resolvedCourseData;
+            this.courseService.takeInResolvedData(this.courses);
+        }
+
+        const resolvedMessageData: Message[] | DataError = this.activatedRoute.snapshot.data[`resolvedMessages`];
+
+        if (resolvedMessageData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedMessageData}`);
+            dataError = true;
+        } else {
+            this.messages = resolvedMessageData;
+            this.messageService.takeInResolvedData(this.messages);
+        }
+
+        const resolvedDiscussionSettingsData: DiscussionSettings[] | DataError = this.activatedRoute.snapshot.data[`resolvedDiscussionSettings`];
+
+        if (resolvedDiscussionSettingsData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedDiscussionSettingsData}`);
+            dataError = true;
+        } else {
+            this.discussionSettings = resolvedDiscussionSettingsData;
+            this.discussionService.takeInResolvedData(this.discussionSettings);
+        }
+
+        const resolvedAnnouncementData: Announcements[] | DataError = this.activatedRoute.snapshot.data[`resolvedAnnouncements`];
+
+        if (resolvedAnnouncementData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedAnnouncementData}`);
+            dataError = true;
+        } else {
+            this.announcements = resolvedAnnouncementData;
+            this.announcementsService.takeInResolvedData(this.announcements);
+        }
+
+        const resolvedCurrentCourse: Course | DataError = this.activatedRoute.snapshot.data.resolvedCurrentCourse;
+        if (resolvedCurrentCourse instanceof DataError) {
+            console.log(`Data loading error: ${resolvedCurrentCourse}`);
+            dataError = true;
+        } else {
+            this.currentCourse = resolvedCurrentCourse[0];
+            console.log('This currentCourse: ', this.currentCourse);
+          //  this.announcementsService.takeInResolvedData(this.announcements);
+        }
+
+
+        // console.log('this users: ', this.users);
+    //     this.assignments = this.activatedRoute.snapshot.data.assignments;
+    //    // console.log('this assignments: ', this.assignments);
+    //     this.enrollments = this.activatedRoute.snapshot.data.enrollments;
+    //     this.materials = this.activatedRoute.snapshot.data.allMaterials;
+    //     this.courses = this.activatedRoute.snapshot.data.courses;
+    //     this.messages = this.activatedRoute.snapshot.data.messages;
+    //     this.discussionSettings = this.activatedRoute.snapshot.data.discussionSettings;
+    //     this.announcements = this.activatedRoute.snapshot.data.announcements;
+    //     this.currentCourse = this.activatedRoute.snapshot.data.thisCourse;
+    //     console.log('This CurrentCourse: ', this.currentCourse);
+    //     this.classMaterials = this.activatedRoute.snapshot.data.classMaterials;
+    //     this.notesSettings = this.activatedRoute.snapshot.data.notesSettings;
+
+
+
+        this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+        this.instructorThumbnails = this.instructors.map(
+              instructor => this.createInstructorThumbnail(instructor));
+
+        this.studentIDList = [];
+        this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
+        this.studentThumbnails = this.students.map(student =>
+                    this.createStudentThumbnail(student));
+        // this.activatedRoute.params.subscribe(params => {
+        //     this.onSectionChange(params.id2);
+
+        //     // Grab the data from the Route
+
+        //   //  console.log('THIS CLASS ID:', this.classID);
+        //     this.classes = this.activatedRoute.snapshot.data.classes;
+
+        //  //   console.log('THIS CLASS IS: ', this.thisClass);
+        //     this.users = this.activatedRoute.snapshot.data.users;
+        //     this.sectionNumber = this.activatedRoute.snapshot.params.id2;
+        //     this.discussionSettings = this.activatedRoute.snapshot.data.discussionSettings;
+        //     this.notesSettings = this.activatedRoute.snapshot.data.notesSettings;
+        //     this.announcements = this.activatedRoute.snapshot.data.announcements;
+        //     this.currentCourse = this.activatedRoute.snapshot.data.thisCourse[0];
+        //   //  console.log('this CurrentCourse: ', this.currentCourse);
+        //   //  console.log('Announcements: ' + this.announcements.length);
+        //     this.currentUser = this.userService.getCurrentUser();
+        // });
 
         // this.activatedRoute.parent.data.subscribe(
         //     data => { this.onDataRetrieved(data.thisClass); }
@@ -138,39 +284,42 @@ export class ClassComponent implements OnInit {
 
         if (!this.sectionNumber) { this.sectionNumber = 0; }
 
-        this.studentIDList = [];
-        console.log('THIS CLASS ID:', this.classID);
-        console.log('THIS CLASS IS: ', this.thisClass);
-        console.log('this CurrentCourse: ', this.currentCourse);
-        this.enrollmentsService.getEnrollmentsInClass(this.classID).subscribe(
-            data => {
-                this.enrollments = data;
-                this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
-                this.studentThumbnails = this.students.map(student =>
-                    this.createStudentThumbnail(student));
-            }, err => { console.log('error getting enrollments'); });
+
+      //  console.log('THIS CLASS ID:', this.classID);
+      //  console.log('THIS CLASS IS: ', this.thisClass);
+      //  console.log('this CurrentCourse: ', this.currentCourse);
+        // this.enrollmentsService.getEnrollmentsInClass(this.classID).subscribe(
+        //     data => {
+        //         this.enrollments = data;
+        //         this.students = this.enrollments.map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
+        //         this.studentThumbnails = this.students.map(student =>
+        //             this.createStudentThumbnail(student));
+        //     }, err => { console.log('error getting enrollments'); });
 
         this.instructorIDList = [];
-        this.assignmentsService.getAssignmentsInClass(this.classID).subscribe(
-            data => {
-                this.assignments = data;
-                console.log('Assignments: ', this.assignments);
-                this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
+        // this.assignmentsService.getAssignmentsInClass(this.classID).subscribe(
+        //     data => {
+        //         this.assignments = data;
+        //        // console.log('Assignments: ', this.assignments);
+        //         this.instructors = this.assignments.map(assignment => this.userService.getUserFromMemoryById(assignment.userId));
 
-                console.log('This class Instructors: ', this.instructors);
-                this.instructorThumbnails = this.instructors.map(
-                    instructor => this.createInstructorThumbnail(instructor));
-            }, err => { console.log('error getting assignments'); });
+        //       //  console.log('This class Instructors: ', this.instructors);
+        //         this.instructorThumbnails = this.instructors.map(
+        //             instructor => this.createInstructorThumbnail(instructor));
+        //     }, err => { console.log('error getting assignments'); });
 
        // this.currentCourse = this.activatedRoute.snapshot.data.thisCourse;
-        console.log('CurrentCourse: ', this.currentCourse);
+       // console.log('CurrentCourse: ', this.currentCourse);
         this.courseimageURL = this.globals.courseimages + '/' + this.currentCourse.courseId
             + '/' + this.currentCourse.image;
 
-        this.classMaterials = this.activatedRoute.snapshot.data.classMaterials;
+       // this.classMaterials = this.activatedRoute.snapshot.data.classMaterials;
 
-        this.buildMaterialSets();
-        this.currentMaterials = this.materialSets[this.sectionNumber];
+        // this.buildMaterialSets();
+       // this.currentMaterials = this.materialSets[this.sectionNumber];
+
+        this.section = this.currentCourse.sections[this.sectionNumber];
+      //  console.log('This section: ', this.section);
 
         this.activatedRoute.params.subscribe(params => {
 
@@ -183,7 +332,7 @@ export class ClassComponent implements OnInit {
                 if (this.currentCourse && this.currentCourse.sections) {
 
                     this.section = this.currentCourse.sections[this.sectionNumber];
-                    this.currentMaterials = this.materialSets[this.sectionNumber];
+                 //   this.currentMaterials = this.materialSets[this.sectionNumber];
                 }
 
             }
@@ -199,53 +348,53 @@ export class ClassComponent implements OnInit {
     // This is where we look through ALL the materials - and group them into sets, if need be
     // for books and docs  (The only reason for doing this is that it is more aesthetically pleaseing
     // to have them grouped in clusters when they are displayed on the page ).
-    buildMaterialSets(): void {
-        this.materialSets = [];
-        for (let j = 0; j < this.classMaterials.length; j++) {
-            this.materialSets[j] = [];
-            for (let i = 0; i < +this.classMaterials[j].length; i++) {
-                let material = this.classMaterials[j][i];
-                if (material) {
-                    const aMaterialSet = new MaterialSet(false, material.type, []);
+    // buildMaterialSets(): void {
+    //     this.materialSets = [];
+    //     for (let j = 0; j < this.classMaterials.length; j++) {
+    //         this.materialSets[j] = [];
+    //         for (let i = 0; i < +this.classMaterials[j].length; i++) {
+    //             let material = this.classMaterials[j][i];
+    //             if (material) {
+    //                 const aMaterialSet = new MaterialSet(false, material.type, []);
 
-                    if ((material.type === 'book')) {
-                        const first = i;
-                        // collect books and documents together into sets of up to 4
-                        while ((material && (material.type === 'book'))
-                            && (i < first + 4) && (i < +this.classMaterials[j].length)) {
-                            // its only a group if is more than one - so this only happens after the 2nd time
-                            if (i > first) { aMaterialSet.group = true; }
-                            aMaterialSet.materials.push(this.classMaterials[j][i]);
-                            i++;
-                            material = this.classMaterials[j][i];
-                        }
-                        if (i > first) { i--; }
+    //                 if ((material.type === 'book')) {
+    //                     const first = i;
+    //                     // collect books and documents together into sets of up to 4
+    //                     while ((material && (material.type === 'book'))
+    //                         && (i < first + 4) && (i < +this.classMaterials[j].length)) {
+    //                         // its only a group if is more than one - so this only happens after the 2nd time
+    //                         if (i > first) { aMaterialSet.group = true; }
+    //                         aMaterialSet.materials.push(this.classMaterials[j][i]);
+    //                         i++;
+    //                         material = this.classMaterials[j][i];
+    //                     }
+    //                     if (i > first) { i--; }
 
-                    } else {
-                        if ((material.type === 'doc')) {
-                            const first = i;
-                            // collect books and documents together into sets of up to 4
-                            while ((material && (material.type === 'doc'))
-                                && (i < first + 4) && (i < +this.classMaterials[j].length)) {
-                                if (i > first) { aMaterialSet.group = true; }// its only a group if is more than one
-                                aMaterialSet.materials.push(this.classMaterials[j][i]);
-                                i++;
-                                material = this.classMaterials[j][i];
-                            }
-                            if (i > first) { i--; }
+    //                 } else {
+    //                     if ((material.type === 'doc')) {
+    //                         const first = i;
+    //                         // collect books and documents together into sets of up to 4
+    //                         while ((material && (material.type === 'doc'))
+    //                             && (i < first + 4) && (i < +this.classMaterials[j].length)) {
+    //                             if (i > first) { aMaterialSet.group = true; }// its only a group if is more than one
+    //                             aMaterialSet.materials.push(this.classMaterials[j][i]);
+    //                             i++;
+    //                             material = this.classMaterials[j][i];
+    //                         }
+    //                         if (i > first) { i--; }
 
-                        } else {
-                            // If it's not a book or a doc - then we don't need to group it
-                            if ((material.type !== 'doc') && (material.type !== 'book')) {
-                                aMaterialSet.materials.push(material);
-                            }
-                        }
-                    }
-                    this.materialSets[j].push(aMaterialSet);
-                }
-            }
-        }
-    }
+    //                     } else {
+    //                         // If it's not a book or a doc - then we don't need to group it
+    //                         if ((material.type !== 'doc') && (material.type !== 'book')) {
+    //                             aMaterialSet.materials.push(material);
+    //                         }
+    //                     }
+    //                 }
+    //                 this.materialSets[j].push(aMaterialSet);
+    //             }
+    //         }
+    //     }
+    // }
     showBio(user): void {
         if (!this.showingBio) {
             this.bioChosen = user;
@@ -288,7 +437,7 @@ export class ClassComponent implements OnInit {
     }
 
     createInstructorThumbnail(user): any {
-        console.log('Creating instructor thumbnail:', user);
+      //  console.log('Creating instructor thumbnail:', user);
         if (user) {
             if (user.userId === this.currentUser.userId) {
                 this.currentUserIsInstructor = true;
@@ -297,7 +446,7 @@ export class ClassComponent implements OnInit {
                 user, userId: user.userId, online: false,
                 size: 100, showUsername: true, showInfo: false, textColor: '#ffffff', border: false, shape: 'circle'
             };
-            console.log('Thumbnail: ', thumbnailObj);
+          //  console.log('Thumbnail: ', thumbnailObj);
             return thumbnailObj;
         }
     }
@@ -329,8 +478,8 @@ export class ClassComponent implements OnInit {
             this.sectionNumber = (this.currentCourse.sections.length - 1);
         }
         this.section = this.currentCourse.sections[this.sectionNumber];
-        this.currentMaterials = this.materialSets[this.sectionNumber];
-        console.log('current Materials' + JSON.stringify(this.currentMaterials));
+       // this.currentMaterials = this.materialSets[this.sectionNumber];
+       // console.log('current Materials' + JSON.stringify(this.currentMaterials));
         const routeString = '/classes/' + this.classID + '/' + this.sectionNumber;
         this.router.navigate([routeString]);
 
@@ -340,7 +489,7 @@ export class ClassComponent implements OnInit {
         this.sectionNumber--;
         if (this.sectionNumber < 0) { this.sectionNumber = 0; }
         this.section = this.currentCourse.sections[this.sectionNumber];
-        this.currentMaterials = this.materialSets[this.sectionNumber];
+       // this.currentMaterials = this.materialSets[this.sectionNumber];
         const routeString = '/classes/' + this.classID + '/' + this.sectionNumber;
         this.router.navigate([routeString]);
 
@@ -349,7 +498,7 @@ export class ClassComponent implements OnInit {
     navigateTo(sectionNumber): void {
         this.showingSectionMenu = false;
         this.sectionNumber = sectionNumber;
-        this.currentMaterials = this.materialSets[this.sectionNumber];
+       // this.currentMaterials = this.materialSets[this.sectionNumber];
         this.section = this.currentCourse.sections[this.sectionNumber];
         const routeString = '/classes/' + this.classID + '/' + this.sectionNumber;
         this.router.navigate([routeString]);

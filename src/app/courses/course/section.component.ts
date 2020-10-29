@@ -43,18 +43,17 @@ export class SectionComponent implements OnInit, OnChanges {
 
     public materials: Material [];
     public materialRefs: Material [];
-   // public section: Section;
-    // public title: string;
-    // public content: string;
-    // public description: string;
+    // public section: Section;
+
+    public description: string;
 
     constructor(private materialService: MaterialService ) {}
 
 
     ngOnInit(): void {
 
-        // this.title = this.course.title;
-        // this.description = this.course.description;
+        this.title = this.course.title;
+        this.description = this.course.description;
         // console.log('sectionNumber: ' + this.section);
         // this.section = this.course.sections[this.sectionNumber];
         // this.materialRefs = this.section.materials;
@@ -73,7 +72,8 @@ export class SectionComponent implements OnInit, OnChanges {
                     const id = material;
 
                     this.materialService.getMaterial(id).subscribe(
-                        ( mat ) => { // console.log('found a material ' + j);
+                        ( mat ) => {
+                        console.log('found a material ',  mat[0]);
                         this.materials.push(mat[0]);
 
                 });

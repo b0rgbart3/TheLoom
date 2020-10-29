@@ -38,6 +38,12 @@ export class MaterialService {
 
     constructor(private http: HttpClient, private globals: Globals) {}
 
+
+  takeInResolvedData(materials: Material[]): void {
+    this.materials = materials;
+  }
+
+
     getAllMaterialsByType(): Observable<any> {
 
        return this.http.get <Material[][]>

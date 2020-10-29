@@ -14,6 +14,7 @@ import { Globals } from '../globals2';
 import { User } from '../models/user.model';
 import { LoomNotificationsService } from '../services/loom.notifications.service';
 import { LoomNotification } from '../models/loom.notification.model';
+
 import { DiscussionSettings } from '../models/discussionsettings.model';
 // import { HttpParamsOptions } from '@angular/common/http/src/params';
 // import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
@@ -76,6 +77,9 @@ export class DiscussionService {
 
   }
 
+  takeInResolvedData(discussionSettings: DiscussionSettings[]): void {
+    this.discussionSettings = discussionSettings;
+  }
 
   getHighestID(): number {
     this.updateIDCount();

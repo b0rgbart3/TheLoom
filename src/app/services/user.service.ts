@@ -159,7 +159,7 @@ export class UserService {
         }
       });
 
-      console.log('In createInstructorsDataObject method.', instructorIdsByClass);
+   //   console.log('In createInstructorsDataObject method.', instructorIdsByClass);
 
       this.instructorThumbnailsByClass = {};
 
@@ -196,13 +196,15 @@ export class UserService {
   }
 
   isloggedin(): boolean {
-    console.log('Looking for logged in user');
+//    console.log('Looking for logged in user');
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
     if (this.currentUser != null) {
-      console.log('found a user in current storage:', this.currentUser);
+  //    console.log('found a user in current storage:', this.currentUser);
       return true;
-    } else { console.log('no logged in user.'); return false; }
+    } else {
+     // console.log('no logged in user.');
+      return false; }
   }
 
   getCurrentUser(): User {
@@ -217,7 +219,7 @@ export class UserService {
 
   login(loginObject): Observable<User> {
 
-    console.log('About to login: ', loginObject);
+  //  console.log('About to login: ', loginObject);
     return this.http.post<User>(this.globals.authenticate, loginObject, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -243,11 +245,11 @@ export class UserService {
 
   getUserFromMemoryById(queryId: string): User {
 
-    console.log('In User Service looking for a user by id of: ', queryId);
+  //  console.log('In User Service looking for a user by id of: ', queryId);
     let foundUser = null;
     if (this.hasUsers()) {
       foundUser = this.users.find(user => user.userId === queryId);
-      console.log('found user: ', foundUser);
+     // console.log('found user: ', foundUser);
     }
     return foundUser;
   }
@@ -304,7 +306,7 @@ export class UserService {
 
     user.instructor = !user.instructor;
     this.updateUser(user).subscribe(data => { }, error => {
-      console.log('error making instructor');
+    //  console.log('error making instructor');
     });
   }
 
@@ -363,11 +365,11 @@ export class UserService {
   findUserByUsername(queryName): User {
     let foundUser = null;
 
-    console.log('searching for a user with a username of: ' + queryName);
+  //  console.log('searching for a user with a username of: ' + queryName);
     if (this.users) {
 
       this.users.forEach( user => {
-        console.log(user.username);
+      //  console.log(user.username);
         if (user.username === queryName) {
           foundUser = user;
         }
