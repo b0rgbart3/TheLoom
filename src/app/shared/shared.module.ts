@@ -15,6 +15,7 @@ import { ClickOutsideDirective } from '../directives/clickoutside.directive';
 import { BiopopComponent } from '../classes/class/biopop.component';
 import { ClassComponent } from '../classes/class/class.component';
 import { SectionComponent } from '../courses/course/section.component';
+import { MaterialComponent } from '../materials/material.component';
 
 @NgModule ( {
     imports: [
@@ -24,6 +25,7 @@ import { SectionComponent } from '../courses/course/section.component';
         MatIconModule,
         RouterModule,
         BrowserModule,
+
     ],
     declarations: [
         ClassListComponent,
@@ -49,6 +51,7 @@ import { SectionComponent } from '../courses/course/section.component';
         NavBarComponent,
         ClickOutsideDirective,
         BiopopComponent,
+  
     ]
 
 })

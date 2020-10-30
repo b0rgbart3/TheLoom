@@ -1,8 +1,14 @@
 
 <div *ngIf="materialcollection" class='materialCollection'>
 
-
-
+    <div *ngIf="materialcollection.books">
+    
+        <div *ngFor="let book of materialcollection.books; let i = index" class='bookWrap'>
+            BOOK:
+            <book-component [bookObject]="book"></book-component>
+        </div>
+    </div>
+    
     <div *ngIf="materialcollection.videos">
       
         <div *ngFor="let vid of materialcollection.videos; let i = index" class='videoWrap'>

@@ -23,8 +23,8 @@ export class CacheInterceptor implements HttpInterceptor {
 
          // return cached response
         if (cachedResponse) {
-            console.log(`Returning a cached response: ${cachedResponse.url}`);
-            console.log(cachedResponse);
+           //  console.log(`Returning a cached response: ${cachedResponse.url}`);
+          //  console.log(cachedResponse);
             return of(cachedResponse);
         }
 

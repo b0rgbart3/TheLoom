@@ -97,13 +97,12 @@ export class MaterialService {
     getMaterialFromMemory(queryID): Material {
 
       if (this.materials) {
-        // console.log('looking: ' + this.classes.length);
-        this.materials.forEach( material => {
-          if (material.id === queryID ) {
-            return material;
-          }
-        });
-        return null;
+      //  console.log('looking: ' + queryID, ' in: ', this.materials);
+        return this.materials.filter( (thisMaterial) => thisMaterial.id === queryID)[0];
+
+    }
+    else {
+      return null;
     }
   }
 
@@ -120,6 +119,9 @@ export class MaterialService {
     return this.http.get <Material[]> (this.globals.materials);
   }
 
+  getAllMaterials(): Observable <Material[]> {
+    return this.http.get <Material[]> (this.globals.materials);
+  }
 
   hideRemovalsFromBatch( batch ): [] {
     // For now I'm just going to remove the class objects that are 'marked for removal'

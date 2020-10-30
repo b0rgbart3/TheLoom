@@ -60,13 +60,13 @@ const loomRoutes: Routes = [
         resolvedClasses: ClassesResolver,
         resolvedAssignments: AssignmentsResolver,
         resolvedEnrollments: EnrollmentsResolver,
-        resolvedMaterials: MaterialsResolver,
         resolvedCourses: CoursesResolver,
         resolvedMessages: MessagesResolver,
         resolvedDiscussionSettings: DiscussionSettingsResolver,
         resolvedAnnouncements: AnnouncementsResolver,
         resolvedCurrentCourse: ClassCourseResolver,
         resolvedNotesSettings: NotesSettingsResolver,
+        resolvedMaterials: MaterialsResolver,
 
 
         // allDSObjects: AllDiscussionSettingsResolver,

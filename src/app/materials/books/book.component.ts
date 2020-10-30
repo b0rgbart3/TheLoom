@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Globals } from '../../../globals2';
-import { ClickOutsideDirective } from '../../../_directives/clickOutside.directive';
+import { Globals } from '../../globals2';
+// import { ClickOutsideDirective } from '../../../_directives/clickOutside.directive';
 import { Router } from '@angular/router';
-import { Material } from '../../../models/material.model';
+import { Material } from '../../models/material.model';
 
 
 
 @Component({
-    moduleId: module.id,
-    selector: 'book',
+    // moduleId: module.id,
+    selector: 'book-component',
     templateUrl: 'book.component.html',
     styleUrls: ['book.component.css'],
 })
@@ -19,24 +19,24 @@ export class BookComponent implements OnInit {
     big: boolean;
 constructor( private globals: Globals, private router: Router) {}
 
-ngOnInit() {
- // console.log('In book component: book = ' + JSON.stringify(this.book));
+ngOnInit(): void{
+  console.log('In book component: book = ', this.book);
   this.imageURL = this.globals.materialimages + '/' + this.book.id + '/' + this.book.image;
   this.big = false;
 }
 
-goBig(event) {
+goBig(event): void {
     this.big = !this.big;
    // console.log('in goBig');
     event.stopPropagation();
 }
 
-goSmall() {
+goSmall(): void {
     console.log('in goSmall');
     this.big = false;
 }
 
-open_modal(URL) {
+open_modal(URL): void {
     window.open(URL, '_blank');
 }
 

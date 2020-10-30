@@ -173,16 +173,7 @@ export class ClassComponent implements OnInit {
             this.enrollmentsService.takeInResolvedData(this.enrollments);
         }
 
-        const resolvedMaterialData: Material[] | DataError = this.activatedRoute.snapshot.data[`resolvedEnrollments`];
 
-        if (resolvedMaterialData instanceof DataError) {
-            console.log(`Data loading error: ${resolvedMaterialData}`);
-            dataError = true;
-        } else {
-            this.materials = resolvedMaterialData;
-           //  console.log('This Materials', this.materials);
-            this.materialService.takeInResolvedData(this.materials);
-        }
 
         const resolvedCourseData: Course[] | DataError = this.activatedRoute.snapshot.data[`resolvedCourses`];
 
@@ -232,6 +223,17 @@ export class ClassComponent implements OnInit {
             this.currentCourse = resolvedCurrentCourse[0];
           //  console.log('This currentCourse: ', this.currentCourse);
           //  this.announcementsService.takeInResolvedData(this.announcements);
+        }
+
+        const resolvedMaterialData: Material[] | DataError = this.activatedRoute.snapshot.data[`resolvedMaterials`];
+
+        if (resolvedMaterialData instanceof DataError) {
+            console.log(`Data loading error: ${resolvedMaterialData}`);
+            dataError = true;
+        } else {
+            this.materials = resolvedMaterialData;
+            console.log('This Materials', this.materials);
+            this.materialService.takeInResolvedData(this.materials);
         }
 
 

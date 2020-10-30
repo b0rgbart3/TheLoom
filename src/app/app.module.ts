@@ -36,6 +36,7 @@ import { EnrollmentsService } from './services/enrollments.service';
 import { EnrollmentsResolver } from './resolvers/enrollments.resolver';
 import { AuthGuard } from './services/auth-guard.service';
 import { HomeComponent } from './home/home.component';
+import { BookComponent } from './materials/books/book.component';
 
 import { MessageService } from './services/message.service';
 import { LoomNotificationsService } from './services/loom.notifications.service';
@@ -51,6 +52,9 @@ import { NotesService } from './services/notes.service';
 import { NotesSettingsResolver } from './resolvers/notes-settings.resolver';
 import { ClassComponent } from './classes/class/class.component';
 import { SectionComponent } from './courses/course/section.component';
+// import { MaterialComponent } from './materials/material.component';
+import { MaterialCollection } from './models/materialcollection.model';
+import { MaterialCollectionComponent } from './materials/material-collection/material-collection.component';
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -67,6 +71,8 @@ import { SectionComponent } from './courses/course/section.component';
     RegisterComponent,
     ClassComponent,
     SectionComponent,
+    MaterialCollectionComponent,
+    BookComponent,
   ],
   imports: [
     CommonModule,

@@ -6,9 +6,9 @@
 
     <div *ngIf='materials && materials.length > 0' class='section'>
         <h3>Reference Materials:</h3>
-    <div *ngFor= 'let material of materials'>
-        <material [material]=material></material>
+ 
+    <material-collection [materialcollection]=materialCollection></material-collection>
        
-    </div>
+
     </div>
 <br><br clear='all'>

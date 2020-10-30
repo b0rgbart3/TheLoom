@@ -4,6 +4,8 @@ import { Course } from '../../models/course.model';
 import { MaterialService } from '../../services/material.service';
 import { Material } from '../../models/material.model';
 import { Section } from '../../models/section.model';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
@@ -43,6 +45,7 @@ export class SectionComponent implements OnInit, OnChanges {
 
     public materials: Material [];
     public materialRefs: Material [];
+    public materialCollection: {};
     // public section: Section;
 
     public description: string;
@@ -54,15 +57,19 @@ export class SectionComponent implements OnInit, OnChanges {
 
         this.title = this.course.title;
         this.description = this.course.description;
+      //  console.log('Materials in section: ', this.section.materials);
         // console.log('sectionNumber: ' + this.section);
         // this.section = this.course.sections[this.sectionNumber];
         // this.materialRefs = this.section.materials;
-       // this.loadInMaterials();
+        this.loadInMaterials();
+        console.log('This sections materials: ', this.materials);
     }
 
     ngOnChanges(): void {
         // console.log('changes');
      //   this.loadInMaterials();
+     this.loadInMaterials();
+     console.log('This sections materials: ', this.materials);
      }
 
     loadInMaterials(): void {
@@ -70,18 +77,29 @@ export class SectionComponent implements OnInit, OnChanges {
             if (this.section.materials) {
                 this.section.materials.forEach( material => {
                     const id = material;
-
-                    this.materialService.getMaterial(id).subscribe(
-                        ( mat ) => {
-                  //      console.log('found a material ',  mat[0]);
-                        this.materials.push(mat[0]);
-
-                });
-
-
+                   // console.log('looking for material: ', id);
+                    const thisMaterial = this.materialService.getMaterialFromMemory(id);
+                //    console.log('received material: ', thisMaterial);
+                    this.materials.push(thisMaterial);
             });
+              //  console.log('this materials', this.materials);
 
+                this.buildMaterialCollection();
         }
+
+    }
+
+    buildMaterialCollection(): void {
+        this.materialCollection = {};
+
+        const books = this.materials.filter( (mat) => mat.type === 'book');
+        const videos = this.materials.filter( (mat) => mat.type === 'video');
+        const audios = this.materials.filter( (mat) => mat.type === 'audio');
+        const docs = this.materials.filter( (mat) => mat.type === 'doc');
+        const blocks = this.materials.filter( (mat) => mat.type === 'block');
+        const quotes = this.materials.filter( (mat) => mat.type === 'quote');
+
+        this.materialCollection = { books, videos, audios, docs, blocks, quotes };
     }
 
 }

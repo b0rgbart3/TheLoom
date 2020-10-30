@@ -19,7 +19,7 @@ import { DataError } from '../models/dataerror.model';
 export class MaterialsResolver implements Resolve<Material[] | DataError> {
 
   constructor(
-    private classService: ClassService) { }
+    private materialService: MaterialService) { }
 
   resolve(
     route: ActivatedRouteSnapshot,
@@ -28,7 +28,7 @@ export class MaterialsResolver implements Resolve<Material[] | DataError> {
     // Angular automatially subscribes to this get request
     // because it is in a "Resolver".
 
-    return this.classService.getClasses()
+    return this.materialService.getAllMaterials()
       .pipe(
         catchError(err => of(err))
       );

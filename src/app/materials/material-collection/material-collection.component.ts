@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialCollection } from '../../models/materialcollection.model';
 import { Globals } from '../../globals2';
@@ -22,11 +24,12 @@ export class MaterialCollectionComponent implements OnInit {
 
     ngOnInit(): void {
 
+      console.log('In the Material Collection Component: ', this.materialcollection);
       this.displayModal = false;
       this.modalURL = '';
 
       if (this.materialcollection.docs) {
-          //  console.log('found documents :' + this.materialcollection.docs.length);
+          console.log('found documents :' + this.materialcollection.docs.length);
 
           this.materialcollection.docs.forEach( matCol => {
             if (matCol.image && (matCol.image !== undefined)) {
