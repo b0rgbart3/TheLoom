@@ -24,7 +24,6 @@
                 <div *ngIf='!set.group && set.materials && set.materials[0]'>
                    
                     <div *ngIf='set.materials[0].type === "video"' class='videoWrap'>
-                        VIDEO:
                             <video-component [videoObject]="set.materials[0]"></video-component>
                     </div>
 
@@ -38,20 +37,20 @@
                     </div>
 
                     <div *ngIf='set.materials[0].type === "doc"' class='docWrap'>
-                        DOC:
+                       
                         <doc-component [docObject]="set.materials[0]"></doc-component>
                     </div>
                     
                     <div *ngIf='set.materials[0].type === "book"' class='bookWrap'>
-                        BOOK:
+                      
                         <book-component [book]='set.materials[0]'></book-component>
                     </div>
                     <div *ngIf='set.materials[0].type === "block"' class='blockWrap'>
-                        BLOCK:
+                       
                             <block-component [block]="set.materials[0]"></block-component> 
                     </div>
                     <div *ngIf='set.materials[0].type === "quote"' class='quoteWrap'>
-                        QUOTE:
+                      
                         <!-- <P>SHOULD BE A QUOTE HERE</P> {{ set.materials[0] | json }} -->
                             <quote-component [quoteObject]="set.materials[0]"></quote-component> 
                     </div>

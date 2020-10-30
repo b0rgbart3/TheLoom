@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
 
     ngOnInit(): void {
 
-        console.log('In Home Component Init');
+      //  console.log('In Home Component Init');
         this.showTabs = true;
         this.showTaking = true;
         this.showTeaching = false;
@@ -63,6 +63,7 @@ export class HomeComponent implements OnInit {
         this.teachingLabel = 'tabLabel';
         this.currentUser = this.userService.getCurrentUser();
 
+        console.log('The current user: ', this.currentUser);
         const resolvedUserData: User[] | DataError = this.activatedRoute.snapshot.data[`resolvedUsers`];
         const resolvedClassData: ClassModel[] | DataError = this.activatedRoute.snapshot.data[`resolvedClasses`];
         const resolvedCourseData: Course[] | DataError = this.activatedRoute.snapshot.data[`resolvedCourses`];
@@ -88,7 +89,7 @@ export class HomeComponent implements OnInit {
             dataError = true;
         } else {
             this.classes = resolvedClassData;
-            console.log('classes:', this.classes);
+         //   console.log('classes:', this.classes);
             this.classService.takeInResolvedData(this.classes);
         }
         if (resolvedAssignmentData instanceof DataError) {
@@ -105,7 +106,7 @@ export class HomeComponent implements OnInit {
         }
 
 
-        console.log('Got routed to the home component.');
+       // console.log('Got routed to the home component.');
         const resolvedEnrollmentData: Enrollment[] | DataError = this.activatedRoute.snapshot.data[`resolvedEnrollments`];
 
 
@@ -119,7 +120,13 @@ export class HomeComponent implements OnInit {
 
         console.log('Enrollments: ', this.enrollments);
         if (this.enrollments) {
-            this.classesTakingIDList = this.enrollments.map(enrollment => enrollment.classId);
+            const enrollmentsForCurrentUser = this.enrollments.filter( (enrollment) => enrollment.userId === this.currentUser.userId );
+
+            this.classesTakingIDList = enrollmentsForCurrentUser.map( (enrollment) =>
+                enrollment.classId
+            );
+
+
         }
 
 
@@ -147,7 +154,10 @@ export class HomeComponent implements OnInit {
         console.log('Assignments: ', this.assignments);
 
         if (this.assignments) {
-            this.classesTeachingIDList = this.assignments.map(assignment => assignment.classId);
+            const classesCurrentUserIsTeaching = this.assignments.filter( (assignment) => assignment.userId === this.currentUser.userId );
+
+
+            this.classesTeachingIDList = classesCurrentUserIsTeaching.map(assignment => assignment.classId);
         }
         console.log('Classes Teaching ID List: ', this.classesTeachingIDList);
         this.classesTeaching = [];

@@ -114,6 +114,7 @@ export class ClassComponent implements OnInit {
     ngOnInit(): void {
 
         this.classID = this.activatedRoute.snapshot.params.id;
+        console.log('This class\'s ID: ', this.classID);
         this.currentMaterials = null;
         this.messaging = false;
         this.currentUser = this.userService.getCurrentUser();
@@ -278,12 +279,12 @@ export class ClassComponent implements OnInit {
               instructor => this.createInstructorThumbnail(instructor));
 
         this.studentIDList = [];
-        console.log('Enrollments: ', this.enrollments);
+       // console.log('Enrollments: ', this.enrollments);
 
         this.students = this.enrollments.filter( (enr) => enr.classId === this.thisClass.classId)
         .map(enrollment => this.userService.getUserFromMemoryById(enrollment.userId));
 
-        console.log('Student list: ', this.students);
+       // console.log('Student list: ', this.students);
         this.studentThumbnails = this.students.map(student =>
                     this.createStudentThumbnail(student));
         // this.activatedRoute.params.subscribe(params => {
@@ -347,7 +348,7 @@ export class ClassComponent implements OnInit {
        // this.currentMaterials = this.materialSets[this.sectionNumber];
 
         this.section = this.currentCourse.sections[this.sectionNumber];
-        console.log('This section: ', this.section);
+       // console.log('This section: ', this.section);
 
         this.activatedRoute.params.subscribe(params => {
 
@@ -375,11 +376,11 @@ export class ClassComponent implements OnInit {
     buildMatObjectsArrayForThisClass(): Material[] {
         const classMaterials = [];
 
-        // console.log('This curentCourse sections:', this.currentCourse.sections);
+        console.log('This curentCourse sections:', this.currentCourse.sections);
 
         this.currentCourse.sections.forEach( (aSection, index) => {
 
-            console.log('This section: ', aSection);
+          //  console.log('This section: ', aSection);
             classMaterials[index] = [];
             if (aSection.materials) {
                 aSection.materials.forEach( (materialId) => {
