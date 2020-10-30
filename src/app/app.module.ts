@@ -59,6 +59,8 @@ import { ImageComponent } from './materials/image/image.component';
 import { DisplayMaterialsComponent } from './materials/display-materials/display-materials.component';
 import { BlockComponent } from './materials/block/block.component';
 import { DocComponent } from './materials/doc/doc.component';
+import { AudioComponent } from './materials/audio/audio.component';
+import { VideoComponent } from './materials/video/video.component';
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -77,6 +79,8 @@ import { DocComponent } from './materials/doc/doc.component';
     SectionComponent,
     MaterialCollectionComponent,
     BookComponent,
+    AudioComponent,
+    VideoComponent,
     DocComponent,
     BlockComponent,
     ImageComponent,

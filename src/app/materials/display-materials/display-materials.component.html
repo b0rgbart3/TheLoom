@@ -13,9 +13,8 @@
 
                             </div>
                             <div *ngIf='set.type === "doc"' class='docSet'>
-                                DOCUMENTS:
+                            
                                 <div *ngFor='let material of set.materials' class='docPluralWrap'>
-                                    DOCUMENT:
                                         <doc-component [docObject]="material"></doc-component>
                                 </div>
 
@@ -30,7 +29,6 @@
                     </div>
 
                     <div *ngIf='set.materials[0].type === "audio"' class='audioWrap'>
-                        AUDIO:
                         <audio-component [audioObject]="set.materials[0]"></audio-component>
                     </div>
 
