@@ -6,8 +6,6 @@ import { Material } from '../../models/material.model';
 import { Section } from '../../models/section.model';
 
 
-
-
 @Component({
     moduleId: module.id,
     selector: 'course',

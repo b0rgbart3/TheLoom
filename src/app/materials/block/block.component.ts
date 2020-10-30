@@ -3,12 +3,13 @@ import { Globals } from '../../globals2';
 // import { ClickOutsideDirective } from '../../_directives/clickOutside.directive';
 import { Router } from '@angular/router';
 import { Material } from '../../models/material.model';
-
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 @Component({
-    moduleId: module.id,
-    selector: 'block-comp',
+   // moduleId: module.id,
+    selector: 'block-component',
     templateUrl: 'block.component.html',
     styleUrls: ['block.component.css'],
 })

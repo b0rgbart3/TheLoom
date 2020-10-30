@@ -4,8 +4,7 @@
     <div *ngIf="materialcollection.books">
     
         <div *ngFor="let book of materialcollection.books; let i = index" class='bookWrap'>
-            BOOK:
-            <book-component [bookObject]="book"></book-component>
+            <book-component [book]="book"></book-component>
         </div>
     </div>
     
@@ -24,7 +23,7 @@
         </div>
     </div>
     <div *ngIf="materialcollection.images">
-    
+            Images:
             <div *ngFor="let thisImage of materialcollection.images; let i = index" class='videoWrap'>
                 <image-component [imageObject]="thisImage"></image-component>
             </div>

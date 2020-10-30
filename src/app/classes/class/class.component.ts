@@ -1,4 +1,6 @@
 import { Component, OnInit, DoCheck, OnChanges, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 import { Course } from '../../models/course.model';
 import { CourseService } from '../../services/course.service';
 import { User } from '../../models/user.model';
@@ -340,12 +342,12 @@ export class ClassComponent implements OnInit {
             + '/' + this.currentCourse.image;
 
        // this.classMaterials = this.activatedRoute.snapshot.data.classMaterials;
-
-        // this.buildMaterialSets();
+        this.classMaterials = this.buildMatObjectsArrayForThisClass();
+        this.buildMaterialSets();
        // this.currentMaterials = this.materialSets[this.sectionNumber];
 
         this.section = this.currentCourse.sections[this.sectionNumber];
-      //  console.log('This section: ', this.section);
+        console.log('This section: ', this.section);
 
         this.activatedRoute.params.subscribe(params => {
 
@@ -366,6 +368,30 @@ export class ClassComponent implements OnInit {
 
     }
 
+    // We have material ID#s listed in each section - but we want the actual material Objects,
+    // so here we grab the id's and then build a 2D array of material Objects
+    // for each section.  The length of the classMaterials array == the # of sections.
+
+    buildMatObjectsArrayForThisClass(): Material[] {
+        const classMaterials = [];
+
+        // console.log('This curentCourse sections:', this.currentCourse.sections);
+
+        this.currentCourse.sections.forEach( (aSection, index) => {
+
+            console.log('This section: ', aSection);
+            classMaterials[index] = [];
+            if (aSection.materials) {
+                aSection.materials.forEach( (materialId) => {
+                    const thisMatObject = this.materialService.getMaterialFromMemory(materialId);
+                    classMaterials[index].push(thisMatObject);
+                });
+            }
+
+        });
+        return classMaterials;
+    }
+
     gotoEditor(): void {
         if (this.currentUser && this.currentUser.admin) {
             this.router.navigate(['/admin/courseObjects/' + this.thisClass.course + '/edit']);
@@ -374,53 +400,54 @@ export class ClassComponent implements OnInit {
     // This is where we look through ALL the materials - and group them into sets, if need be
     // for books and docs  (The only reason for doing this is that it is more aesthetically pleaseing
     // to have them grouped in clusters when they are displayed on the page ).
-    // buildMaterialSets(): void {
-    //     this.materialSets = [];
-    //     for (let j = 0; j < this.classMaterials.length; j++) {
-    //         this.materialSets[j] = [];
-    //         for (let i = 0; i < +this.classMaterials[j].length; i++) {
-    //             let material = this.classMaterials[j][i];
-    //             if (material) {
-    //                 const aMaterialSet = new MaterialSet(false, material.type, []);
+    buildMaterialSets(): void {
+        this.materialSets = [];
+        for (let j = 0; j < this.classMaterials.length; j++) {
+            this.materialSets[j] = [];
+            for (let i = 0; i < +this.classMaterials[j].length; i++) {
+                let material = this.classMaterials[j][i];
+                if (material) {
+                    const aMaterialSet = new MaterialSet(false, material.type, []);
 
-    //                 if ((material.type === 'book')) {
-    //                     const first = i;
-    //                     // collect books and documents together into sets of up to 4
-    //                     while ((material && (material.type === 'book'))
-    //                         && (i < first + 4) && (i < +this.classMaterials[j].length)) {
-    //                         // its only a group if is more than one - so this only happens after the 2nd time
-    //                         if (i > first) { aMaterialSet.group = true; }
-    //                         aMaterialSet.materials.push(this.classMaterials[j][i]);
-    //                         i++;
-    //                         material = this.classMaterials[j][i];
-    //                     }
-    //                     if (i > first) { i--; }
+                    if ((material.type === 'book')) {
+                        const first = i;
+                        // collect books and documents together into sets of up to 4
+                        while ((material && (material.type === 'book'))
+                            && (i < first + 4) && (i < +this.classMaterials[j].length)) {
+                            // its only a group if is more than one - so this only happens after the 2nd time
+                            if (i > first) { aMaterialSet.group = true; }
+                            aMaterialSet.materials.push(this.classMaterials[j][i]);
+                            i++;
+                            material = this.classMaterials[j][i];
+                        }
+                        if (i > first) { i--; }
 
-    //                 } else {
-    //                     if ((material.type === 'doc')) {
-    //                         const first = i;
-    //                         // collect books and documents together into sets of up to 4
-    //                         while ((material && (material.type === 'doc'))
-    //                             && (i < first + 4) && (i < +this.classMaterials[j].length)) {
-    //                             if (i > first) { aMaterialSet.group = true; }// its only a group if is more than one
-    //                             aMaterialSet.materials.push(this.classMaterials[j][i]);
-    //                             i++;
-    //                             material = this.classMaterials[j][i];
-    //                         }
-    //                         if (i > first) { i--; }
+                    } else {
+                        if ((material.type === 'doc')) {
+                            const first = i;
+                            // collect books and documents together into sets of up to 4
+                            while ((material && (material.type === 'doc'))
+                                && (i < first + 4) && (i < +this.classMaterials[j].length)) {
+                                if (i > first) { aMaterialSet.group = true; }// its only a group if is more than one
+                                aMaterialSet.materials.push(this.classMaterials[j][i]);
+                                i++;
+                                material = this.classMaterials[j][i];
+                            }
+                            if (i > first) { i--; }
 
-    //                     } else {
-    //                         // If it's not a book or a doc - then we don't need to group it
-    //                         if ((material.type !== 'doc') && (material.type !== 'book')) {
-    //                             aMaterialSet.materials.push(material);
-    //                         }
-    //                     }
-    //                 }
-    //                 this.materialSets[j].push(aMaterialSet);
-    //             }
-    //         }
-    //     }
-    // }
+                        } else {
+                            // If it's not a book or a doc - then we don't need to group it
+                            if ((material.type !== 'doc') && (material.type !== 'book')) {
+                                aMaterialSet.materials.push(material);
+                            }
+                        }
+                    }
+                    this.materialSets[j].push(aMaterialSet);
+                }
+            }
+        }
+        console.log('Material Sets:', this.materialSets);
+    }
     showBio(user): void {
         if (!this.showingBio) {
             this.bioChosen = user;

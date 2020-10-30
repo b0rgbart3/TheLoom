@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Globals } from '../../globals2';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 // import { ClickOutsideDirective } from '../../../_directives/clickOutside.directive';
 import { Router } from '@angular/router';
 import { Material } from '../../models/material.model';

@@ -55,6 +55,10 @@ import { SectionComponent } from './courses/course/section.component';
 // import { MaterialComponent } from './materials/material.component';
 import { MaterialCollection } from './models/materialcollection.model';
 import { MaterialCollectionComponent } from './materials/material-collection/material-collection.component';
+import { ImageComponent } from './materials/image/image.component';
+import { DisplayMaterialsComponent } from './materials/display-materials/display-materials.component';
+import { BlockComponent } from './materials/block/block.component';
+import { DocComponent } from './materials/doc/doc.component';
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -73,6 +77,10 @@ import { MaterialCollectionComponent } from './materials/material-collection/mat
     SectionComponent,
     MaterialCollectionComponent,
     BookComponent,
+    DocComponent,
+    BlockComponent,
+    ImageComponent,
+    DisplayMaterialsComponent,
   ],
   imports: [
     CommonModule,
@@ -117,6 +125,10 @@ import { MaterialCollectionComponent } from './materials/material-collection/mat
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
+  ],
+  exports: [
+    BrowserModule,
+    CommonModule
   ],
   bootstrap: [AppComponent]
 })

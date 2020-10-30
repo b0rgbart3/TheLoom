@@ -4,9 +4,12 @@ import { MaterialCollection } from '../../models/materialcollection.model';
 import { Globals } from '../../globals2';
 import { RouterLinkWithHref } from '@angular/router';
 import { Material } from '../../models/material.model';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
+
 
 @Component({
-    moduleId: module.id,
+  //  moduleId: module.id,
     selector: 'quote-component',
     templateUrl: 'quote.component.html',
     styleUrls: ['quote.component.css']

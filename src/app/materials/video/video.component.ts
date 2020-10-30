@@ -15,12 +15,14 @@ import {VgApiService} from '@videogular/ngx-videogular/core';
 
 import { DomSanitizer } from '@angular/platform-browser';
 import { SafeResourceUrl } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 // import { EmbedVideoService } from 'ngx-embed-video';
 
 
 @Component({
-    moduleId: module.id,
+   // moduleId: module.id,
     selector: 'video-component',
     templateUrl: 'video.component.html',
     styleUrls: ['video.component.css']

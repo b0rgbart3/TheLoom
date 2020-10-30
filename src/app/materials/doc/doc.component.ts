@@ -1,13 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Globals } from '../../globals2';
-import { ClickOutsideDirective } from '../../_directives/clickOutside.directive';
+// import { ClickOutsideDirective } from '../../_directives/clickOutside.directive';
 import { Router } from '@angular/router';
 import { Material } from '../../models/material.model';
+import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'doc-component',
     templateUrl: 'doc.component.html',
     styleUrls: ['doc.component.css'],
@@ -21,29 +23,31 @@ export class DocComponent implements OnInit {
     displayModal: boolean;
     modalURL: string;
     fileURL: string;
-constructor( private globals: Globals, private router: Router) {}
+    constructor(private globals: Globals, private router: Router) { }
 
-ngOnInit() {
- // console.log('In book component: book = ' + JSON.stringify(this.book));
-  this.imageURL = this.globals.materialimages +
-     '/' + this.docObject.id + '/' + this.docObject.image;
-  this.display = false;
-  this.fileURL = this.globals.materialfiles + '/' + this.docObject.id + '/' + this.docObject.file;
-}
+    ngOnInit(): void {
+        // console.log('In book component: book = ' + JSON.stringify(this.book));
+        console.log('In Doc component, docObject: ', this.docObject);
 
-toggleDisplay() {
-    this.display = !this.display;
-}
+        this.imageURL = this.globals.materialimages +
+            '/' + this.docObject.id + '/' + this.docObject.image;
+        this.display = false;
+        this.fileURL = this.globals.materialfiles + '/' + this.docObject.id + '/' + this.docObject.file;
+    }
 
-open_modal( ) {
+    toggleDisplay(): void {
+        this.display = !this.display;
+    }
 
-    console.log('Opening modal: ' );
-    this.displayModal = true;
-    this.modalURL = this.fileURL;
- }
+    open_modal(): void {
 
- closeModal( truth ) {
-   this.displayModal = false;
- }
+        console.log('Opening modal: ');
+        this.displayModal = true;
+        this.modalURL = this.fileURL;
+    }
+
+    closeModal(truth): void {
+        this.displayModal = false;
+    }
 }
 
