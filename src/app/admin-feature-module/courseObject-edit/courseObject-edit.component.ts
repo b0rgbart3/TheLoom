@@ -17,7 +17,7 @@ import { Location } from '@angular/common';
 // import { DragulaService } from 'ng2-dragula';
 
 @Component({
-    moduleId: module.id,
+  //  moduleId: module.id,
     templateUrl: 'courseObject-edit.component.html',
     styleUrls: ['courseObject-edit.component.css']
 })

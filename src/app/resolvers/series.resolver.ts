@@ -21,11 +21,8 @@ export class SeriesResolver implements Resolve<Series[] | DataError> {
   ): Observable<Series[] | DataError> {
     // Angular automatially subscribes to this get request
     // because it is in a "Resolver".
-
-    return this.seriesService.getSeries()
-      .pipe(
-        catchError(err => of(err))
-      );
+    const thisSeriesId = route.params.id;
+    return this.seriesService.getSeries(thisSeriesId);
   }
 
 }

@@ -12,7 +12,7 @@ import { Globals } from '../../globals2';
 import { Location } from '@angular/common';
 
 @Component({
-    moduleId: module.id,
+  //  moduleId: module.id,
     selector: 'material-edit',
     templateUrl: 'material-edit.component.html',
     styleUrls: ['material-edit.component.css']

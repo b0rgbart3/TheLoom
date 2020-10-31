@@ -1,19 +1,18 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { User } from '../../models/user.model';
-import { FlashMessagesService } from 'angular2-flash-messages';
+// import { FlashMessagesService } from 'angular2-flash-messages';
 import { RouterModule, Routes, NavigationExtras, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-import { LoomsFacebookService } from '../../services/loomsfacebook.service';
-import { LoginResponse, FacebookService, InitParams } from 'ngx-facebook';
+
 import { AlertService } from '../../services/alert.service';
 import { Globals } from '../../globals2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Material } from '../../models/material.model';
 
 
 @Component({
-    moduleId: module.id,
+ //   moduleId: module.id,
     selector: 'new-material-modal',
     templateUrl: 'new-material-modal.component.html',
     styleUrls: ['new-material-modal.component.css']
@@ -25,14 +24,14 @@ export class NewMaterialModalComponent implements OnInit {
     material: Material;
 
     @Input() newMateriaModal: Subject<any>;
-    @Output() onComplete= new EventEmitter <Material>();
-    @Output() onClose = new EventEmitter <boolean>();
+    // @Output() onComplete= new EventEmitter <Material>();
+    // @Output() onClose = new EventEmitter <boolean>();
 
     fresh: boolean;
     constructor() {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.fresh = false;
         this.display = false;
 
@@ -50,23 +49,25 @@ export class NewMaterialModalComponent implements OnInit {
         });
     }
 
-    close() {
-        this.onClose.emit(true);
+    close(): void {
+     //   this.onClose.emit(true);
         this.closeModal();
     }
 
 
-    completed( material ) {
+    completed( material ): void {
         // If this is a new material object - we want to send it back to the section component so it can be
         // added to the list of materials in this section.  Otherwise, the user was just editing an existing one.
-        if ( this.fresh ) {
-        this.onComplete.emit( material); } else {
-            this.onComplete.emit( null );
-        }
+    //     if ( this.fresh ) {
+    //     this.onComplete.emit( material);
+    // }
+    //     else {
+    //         this.onComplete.emit( null );
+    //     }
         this.closeModal();
     }
 
-    closeModal() {
+    closeModal(): void {
         // Here the user pre-maturely chose to Close the Modal - instead of making a selection
         this.display = false;
     }

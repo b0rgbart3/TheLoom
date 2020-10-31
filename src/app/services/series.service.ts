@@ -33,28 +33,30 @@ export class SeriesService {
 
   }
 
-  getSeries(seriesId): void {
-    // if (seriesId === 0) {
-    //   // get a list of ALL the series
-    //   console.log('sending get request for series');
-    //   return this.http.get<Series[]>(this.globals.series).do(data => {
-    //     this.seriesCount = data.length;
-    //     this.series = data;
-    //     console.log('Got Data back for Series: ' + JSON.stringify(data));
-    //     this.updateIDCount();
-    //     this.hideRemovals();
-    //   }).catch(this.handleError);
-    // } else {
-    //   return this.http.get<Series[]>(this.globals.series + '?id=' + seriesId)
-    //     // debug the flow of data
-    //     .do(data => { // console.log('All: ' + JSON.stringify(data));
-    //       this.seriesCount = data.length;
-    //       this.series = data;
-    //       this.updateIDCount();
-    //       // console.log("Course highest ID: "+ this.highestID);
-    //     })
-    //     .catch(this.handleError);
-    // }
+  getSeries(seriesId): Observable<Series[]> {
+    if (seriesId === 0) {
+      // get a list of ALL the series
+      console.log('sending get request for series');
+      return this.http.get<Series[]>(this.globals.series);
+
+      // .do(data => {
+      //   this.seriesCount = data.length;
+      //   this.series = data;
+      //   console.log('Got Data back for Series: ' + JSON.stringify(data));
+      //   this.updateIDCount();
+      //   this.hideRemovals();
+      // }).catch(this.handleError);
+    } else {
+      return this.http.get<Series[]>(this.globals.series + '?id=' + seriesId);
+        // debug the flow of data
+        // .do(data => { // console.log('All: ' + JSON.stringify(data));
+        //   this.seriesCount = data.length;
+        //   this.series = data;
+        //   this.updateIDCount();
+        //   // console.log("Course highest ID: "+ this.highestID);
+        // })
+        // .catch(this.handleError);
+    }
 
   }
 
