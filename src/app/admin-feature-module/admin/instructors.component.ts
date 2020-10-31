@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm, FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Globals } from '../../globals2';
 import { Enrollment } from '../../models/enrollment.model';
-import { ClassModel } from '../../models/class.model';
+import { ClassModel } from '../../models/classModel.model';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 import { ClassService } from '../../services/class.service';
@@ -22,22 +22,23 @@ export class InstructorsComponent implements OnInit {
     instructors: User[];
     instructorFormGroup: FormGroup;
 
-    constructor(private router: Router, private activated_route: ActivatedRoute, private fb: FormBuilder,
+    constructor(
+        private router: Router, private activatedRoute: ActivatedRoute, private fb: FormBuilder,
         private globals: Globals, private userService: UserService, private enrollmentsService: EnrollmentsService,
-    private classService: ClassService ) { }
+        private classService: ClassService) { }
 
 
-    ngOnInit() {
+    ngOnInit(): void {
 
-        this.activated_route.data.subscribe(
+        this.activatedRoute.data.subscribe(
             data => {
-            this.instructors = data['instructors'];
+                this.instructors = data.instructors;
             }
         );
 
-        this.instructorFormGroup =  this.fb.group({
-            user_id: [ '', []],
-            });
+        this.instructorFormGroup = this.fb.group({
+            user_id: ['', []],
+        });
     }
 
 

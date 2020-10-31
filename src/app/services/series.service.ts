@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError, pipe } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 // import { Http, Response, Headers, RequestOptions } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Globals } from '../globals2';
 import { Series } from '../models/series.model';
-
+import { DataError } from '../models/dataerror.model';
 
 
 @Injectable()
@@ -21,28 +22,39 @@ export class SeriesService {
   constructor(private http: HttpClient, private globals: Globals) { }
 
 
-  getSeries(seriesId): Observable<Series[]> {
-    if (seriesId === 0) {
-      // get a list of ALL the series
-      console.log('sending get request for series');
-      return this.http.get<Series[]>(this.globals.series).do(data => {
-        this.seriesCount = data.length;
-        this.series = data;
-        console.log('Got Data back for Series: ' + JSON.stringify(data));
-        this.updateIDCount();
-        this.hideRemovals();
-      }).catch(this.handleError);
-    } else {
-      return this.http.get<Series[]>(this.globals.series + '?id=' + seriesId)
-        // debug the flow of data
-        .do(data => { // console.log('All: ' + JSON.stringify(data));
-          this.seriesCount = data.length;
-          this.series = data;
-          this.updateIDCount();
-          // console.log("Course highest ID: "+ this.highestID);
-        })
-        .catch(this.handleError);
-    }
+  getAllSeries(): Observable<Series[] | DataError> {
+    // console.log ('In user service, gettingUsers');
+
+    return this.http.get<Series[]>(this.globals.users)
+      .pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+
+
+  }
+
+  getSeries(seriesId): void {
+    // if (seriesId === 0) {
+    //   // get a list of ALL the series
+    //   console.log('sending get request for series');
+    //   return this.http.get<Series[]>(this.globals.series).do(data => {
+    //     this.seriesCount = data.length;
+    //     this.series = data;
+    //     console.log('Got Data back for Series: ' + JSON.stringify(data));
+    //     this.updateIDCount();
+    //     this.hideRemovals();
+    //   }).catch(this.handleError);
+    // } else {
+    //   return this.http.get<Series[]>(this.globals.series + '?id=' + seriesId)
+    //     // debug the flow of data
+    //     .do(data => { // console.log('All: ' + JSON.stringify(data));
+    //       this.seriesCount = data.length;
+    //       this.series = data;
+    //       this.updateIDCount();
+    //       // console.log("Course highest ID: "+ this.highestID);
+    //     })
+    //     .catch(this.handleError);
+    // }
 
   }
 
@@ -77,23 +89,23 @@ export class SeriesService {
 
   }
 
-  recoverSeries(seriesObject): Observable<any> {
-    seriesObject.remove_this = false;
-    return this.updateSeries(seriesObject).do(
-      data => {
-        // add this course object back into our main array
-        this.series.push(data);
-        // remove this course object from our list of removed courses
-        for (let i = 0; i < this.removedSeries.length; i++) {
-          if (this.removedSeries[i].id === data.id) {
-            this.removedSeries.splice(i, 1);
-          }
-        }
+  recoverSeries(seriesObject): any {
+    // seriesObject.remove_this = false;
+    // return this.updateSeries(seriesObject).do(
+    //   data => {
+    //     // add this course object back into our main array
+    //     this.series.push(data);
+    //     // remove this course object from our list of removed courses
+    //     for (let i = 0; i < this.removedSeries.length; i++) {
+    //       if (this.removedSeries[i].id === data.id) {
+    //         this.removedSeries.splice(i, 1);
+    //       }
+    //     }
 
-        console.log('recovering course data');
-        return data;
-      })
-      .catch(this.handleError);
+    //     console.log('recovering course data');
+    //     return data;
+    //   })
+    //   .catch(this.handleError);
 
   }
 
@@ -143,6 +155,14 @@ export class SeriesService {
   private handleError(error: HttpErrorResponse): Observable<any> {
     // console.log( error.message );
     return Observable.throw(error.message);
+
+  }
+
+
+  private handleHttpError(error: HttpErrorResponse): Observable<DataError> {
+    const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
+
+    return throwError(dataError);
 
   }
 

@@ -16,7 +16,7 @@ import { UserService } from './services/user.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Globals } from './globals2';
 
-
+import { AdminFeatureModule } from './admin-feature-module/admin-feature.module';
 import { UsersResolver } from './resolvers/users.resolver';
 import { CacheInterceptor } from './resolvers/cache.interceptor';
 import { HttpCacheService } from './resolvers/cache';

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Course } from '../../models/course.model';
 import { User } from '../../models/user.model';
-import { ClassModel } from '../../models/class.model';
+import { ClassModel } from '../../models/classModel.model';
 import { CourseService } from '../../services/course.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ClassService } from '../../services/class.service';
@@ -53,32 +53,32 @@ export class AdminComponent implements OnInit {
     private userService: UserService,
     private seriesService: SeriesService,
     private globals: Globals,
-    private activated_route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
 
   ) {
     this.AVATAR_IMAGE_PATH = globals.basepath + 'avatars/';
     this.isCollapsedStudents = false;
   }
 
-  ngOnInit() {
-    this.userService.ngOnInit();
+  ngOnInit(): void {
+
     this.username = localStorage.getItem('username');
-    this.users = this.activated_route.snapshot.data['users'];
+    this.users = this.activatedRoute.snapshot.data.users;
 
     // this.getClasses();
     // this.getCourses();
 
-    this.instructors = this.activated_route.snapshot.data['instructors'];
+    this.instructors = this.activatedRoute.snapshot.data.instructors;
 
    // this.getSeries();
   }
 
 
-  closer() {
+  closer(): void {
     this.router.navigate(['/home']);
   }
 
-  toggleStudents() {
+  toggleStudents(): void {
      if (this.studentsShowing === 'showing') {
        this.studentsShowing = 'hiding';
      } else {
@@ -86,7 +86,7 @@ export class AdminComponent implements OnInit {
      }
   }
 
-  toggleInstructors() {
+  toggleInstructors(): void {
     if (this.instructorsShowing === 'showing') {
       this.instructorsShowing = 'hiding';
     } else {
@@ -94,7 +94,7 @@ export class AdminComponent implements OnInit {
     }
  }
 
- toggleClasses() {
+ toggleClasses(): void {
   if (this.classesShowing === 'showing') {
     this.classesShowing = 'hiding';
   } else {
@@ -102,7 +102,7 @@ export class AdminComponent implements OnInit {
   }
 }
 
-toggleCourses() {
+toggleCourses(): void {
   if (this.coursesShowing === 'showing') {
     this.coursesShowing = 'hiding';
   } else {
@@ -110,7 +110,7 @@ toggleCourses() {
   }
 }
 
-toggleMaterials() {
+toggleMaterials(): void {
   if (this.materialsShowing === 'showing') {
     this.materialsShowing = 'hiding';
   } else {
@@ -126,7 +126,7 @@ toggleMaterials() {
 //   }
 // }
 
-toggleSeries() {
+toggleSeries(): void {
   if (this.seriesShowing === 'showing') {
     this.seriesShowing = 'hiding';
   } else {
@@ -134,15 +134,15 @@ toggleSeries() {
   }
 }
 
-  createThumbnail(user) {
-    const thumbnailObj = { user: user, user_id: user.id,
+  createThumbnail(user): any {
+    const thumbnailObj = { user, user_id: user.id,
        online: false, size: 45, showUsername: false,
       showInfo: false, textColor: '#000000', border: false, shape: 'circle' };
     return thumbnailObj;
   }
 
-  createEditableThumbnail(user) {
-    const thumbnailObj = { user: user, user_id: user.id,
+  createEditableThumbnail(user): any {
+    const thumbnailObj = { user, user_id: user.id,
       online: false, size: 45, showUsername: false,
       showInfo: false, textColor: '#0000000', border: false, shape: 'circle' };
     return thumbnailObj;
@@ -173,7 +173,7 @@ toggleSeries() {
   //     error => this.errorMessage = <any>error);
   // }
 
-  deleteCourse(courseId) {
+  deleteCourse(courseId): void{
 
     const result = confirm( 'Are you sure you want to delete this course? ');
     if (result) {
@@ -181,53 +181,53 @@ toggleSeries() {
       data => {
      // this.getCourses();
      },
-      error => this.errorMessage = <any>error );
+      error => this.errorMessage = error );
    }
   }
 
-  newClass() {
+  newClass(): void {
     this.router.navigate(['/classedit/0']);
   }
 
-  newSeries() {
+  newSeries(): void {
     this.router.navigate(['/series/0/edit']);
   }
 
-  editSeries(series_id) {
-    this.router.navigate(['/series/' + series_id + '/edit']);
+  editSeries(seriesId): void {
+    this.router.navigate(['/series/' + seriesId + '/edit']);
   }
 
-  deleteClass(classId) {
+  deleteClass(classId): void {
     const result = confirm( 'Are you sure you want to delete this class? ');
     if (result) {
     this.classService.deleteClass(classId).subscribe(
       data => {
      // this.getClasses();
     },
-      error => this.errorMessage = <any>error );
+      error => this.errorMessage = error );
     }
   }
 
-  deleteUser(username, userId) {
+  deleteUser(username, userId): void {
     const result = confirm( 'Are you sure you want to completely delete ' + username + '\'s account?');
     if (result) {
     this.userService.deleteUser(userId).subscribe(
       data => {
       //  this.getUsers();
        },
-        error => this.errorMessage = <any> error );
+        error => this.errorMessage = error );
 
     }
   }
 
-  deleteMaterial(materialId) {
+  deleteMaterial(materialId): void {
     const result = confirm( 'Are you sure you want to delete this material? ');
     if (result) {
     this.materialService.deleteMaterial(materialId).subscribe(
       data => {
       // this.getMaterials();
      },
-      error => this.errorMessage = <any>error );
+      error => this.errorMessage = error );
     }
   }
 

@@ -127,6 +127,18 @@ export class UserService {
 
   }
 
+  getInstructors(): Observable<User[] | DataError> {
+    // console.log ('In user service, gettingUsers');
+
+    return this.http.get<User[]>(this.globals.users)
+      .pipe(
+        catchError(err => this.handleHttpError(err))
+      );
+
+
+  }
+
+
   private handleHttpError(error: HttpErrorResponse): Observable<DataError> {
     const dataError = new DataError(100, error.message, 'An error occcurred retrieving data.');
 
