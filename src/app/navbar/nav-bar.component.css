@@ -187,7 +187,7 @@ p.userName {
 }
 
 .quickMessagesButton {
-    background-image:url('../../assets/images/messages.svg');
+	background-image:url('../../assets/images/messages.svg');
     background-size:60px 60px;
     width:60px;
     height:60px;

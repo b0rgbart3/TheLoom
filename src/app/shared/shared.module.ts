@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { NavBarComponent } from '../navbar/nav-bar.component';
@@ -16,6 +16,9 @@ import { BiopopComponent } from '../classes/class/biopop.component';
 import { ClassComponent } from '../classes/class/class.component';
 import { SectionComponent } from '../courses/course/section.component';
 import { MaterialComponent } from '../materials/material.component';
+import { SeriesService } from '../services/series.service';
+import { UserService } from '../services/user.service';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule ( {
     imports: [
@@ -25,7 +28,7 @@ import { MaterialComponent } from '../materials/material.component';
         MatIconModule,
         RouterModule,
         BrowserModule,
-
+        MatExpansionModule,
     ],
     declarations: [
         ClassListComponent,
@@ -34,15 +37,18 @@ import { MaterialComponent } from '../materials/material.component';
         NavBarComponent,
         ClickOutsideDirective,
         BiopopComponent,
-
+        NavBarComponent,
     ],
     providers: [
-        FormsModule, ReactiveFormsModule,
+        FormsModule,
+        ReactiveFormsModule,
         MatMenuModule,
         MatIconModule,
         RouterModule,
         BrowserModule,
-        CommonModule
+        CommonModule,
+        SeriesService,
+        UserService,
     ],
     exports: [
         ClassListComponent,
@@ -51,8 +57,11 @@ import { MaterialComponent } from '../materials/material.component';
         NavBarComponent,
         ClickOutsideDirective,
         BiopopComponent,
-  
-    ]
+        NavBarComponent,
+        BrowserModule,
+        CommonModule,
+    ],
+    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 
 })
 

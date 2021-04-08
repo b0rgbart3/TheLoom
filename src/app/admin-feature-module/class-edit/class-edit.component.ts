@@ -12,7 +12,8 @@ import _ from 'lodash';
 import {Location} from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   //  moduleId: module.id,

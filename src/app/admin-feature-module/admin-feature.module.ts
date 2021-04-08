@@ -1,63 +1,85 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AdminComponent } from './admin/admin.component';
 import { AdminRouteActivator } from './admin/admin-route-activator';
-import { ClassEditComponent } from './class-edit/class-edit.component';
-import { CourseBuilderComponent } from './course-builder/course-builder.component';
+// import { ClassEditComponent } from './class-edit/class-edit.component';
+// import { CourseBuilderComponent } from './course-builder/course-builder.component';
 import { Error404Component } from '../errors/404component';
 import { WelcomeComponent } from '../welcome/welcome.component';
-import { CourseEditComponent } from './course-edit/course-edit.component';
+// import { CourseEditComponent } from './course-edit/course-edit.component';
 import { CoursesResolver } from '../resolvers/courses.resolver';
 import { MaterialsResolver } from '../resolvers/materials-resolver';
-import { MaterialEditComponent } from './material-edit-component/material-edit.component';
+// import { MaterialEditComponent } from './material-edit-component/material-edit.component';
 import { ClassesResolver } from '../resolvers/classes.resolver';
 import { UsersResolver } from '../resolvers/users.resolver';
 // import { PossibleInstructorsResolver } from '../resolvers/possible-instructors-resolver.service';
 import { FileUploadModule } from 'ng2-file-upload';
-import { SeriesEditComponent } from './series-edit/series-edit.component';
-import { EnrollmentEditComponent } from './enrollments/enrollment-edit.component';
+// import { SeriesEditComponent } from './series-edit/series-edit.component';
+// import { EnrollmentEditComponent } from './enrollments/enrollment-edit.component';
 import { EnrollmentsResolver } from '../resolvers/enrollments.resolver';
 import { AssignmentsResolver } from '../resolvers/assignments.resolver';
 import { UserListComponent } from './admin/user-list/user-list.component';
 
-import { ContentComponent } from './admin/content.component';
+// import { ContentComponent } from './admin/content.component';
 import { StudentsComponent } from './admin/students.component';
-import { InstructorsComponent } from './admin/instructors.component';
+// import { InstructorsComponent } from './admin/instructors.component';
 import { SeriesResolver } from '../resolvers/series.resolver';
-import { EnrollmentsComponent } from './admin/enrollments.component';
-import { AssignmentsComponent } from './admin/assignments.component';
+// import { EnrollmentsComponent } from './admin/enrollments.component';
+// import { AssignmentsComponent } from './admin/assignments.component';
 import { MaterialsAdminComponent } from './admin/materials-admin.component';
-import { CourseEditGuard } from './course-edit/course-edit-guard.service';
-import { CourseObjectEditComponent } from './courseObject-edit/courseObject-edit.component';
-import { SectionEditComponent } from './courseObject-edit/section-edit.component';
-import { CourseObjectEditGuard } from './courseObject-edit/courseObject-edit-guard.service';
+// import { CourseEditGuard } from './course-edit/course-edit-guard.service';
+// import { CourseObjectEditComponent } from './courseObject-edit/courseObject-edit.component';
+// import { SectionEditComponent } from './courseObject-edit/section-edit.component';
+// import { CourseObjectEditGuard } from './courseObject-edit/courseObject-edit-guard.service';
 import { NewMaterialModalComponent } from './courseObject-edit/new-material-modal.component';
-import { MaterialEditGuard } from './material-edit-component/material-edit-guard.service';
+// import { MaterialEditGuard } from './material-edit-component/material-edit-guard.service';
 import { MaterialLineItemComponent } from './courseObject-edit/material-line-item.component';
 import { ClassResolver } from '../resolvers/class.resolver';
 import { CourseResolver } from '../resolvers/course.resolver';
-
-
-
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatListModule } from '@angular/material/list';
+import { FormsModule } from '@angular/forms';
+import { SeriesService } from '../services/series.service';
+import { UserService } from '../services/user.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { CacheInterceptor } from '../resolvers/cache.interceptor';
 
 @NgModule ( {
     imports: [
         SharedModule,
         FileUploadModule,
+        MatButtonModule,
+        MatIconModule,
+        MatExpansionModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatExpansionModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatListModule,
+        FormsModule,
         RouterModule.forChild([
             { path: 'admin', component: AdminComponent,
                 canActivate: [ AdminRouteActivator ],
                 resolve: { users: UsersResolver},
                 children: [
                     { path: '', redirectTo: 'classes', pathMatch: 'full' },
-                    { path: 'students', component: StudentsComponent, resolve: { users: UsersResolver,
-                        classes: ClassesResolver, enrollments: EnrollmentsResolver }},
+                   //  { path: 'students', component: StudentsComponent, resolve: { users: UsersResolver,
+                   //   classes: ClassesResolver, enrollments: EnrollmentsResolver }},
                     // { path: 'enrollments', component: EnrollmentsComponent, resolve: {
                     //     users: UsersResolver, classes: ClassesResolver, enrollments: AllEnrollmentsResolver }},
-                    { path: 'instructors', component: InstructorsComponent,
-                        resolve: { users: UsersResolver ,
-                            classes: ClassesResolver, assignments: AssignmentsResolver }},
+                    // { path: 'instructors', component: InstructorsComponent,
+                    //     resolve: { users: UsersResolver ,
+                    //         classes: ClassesResolver, assignments: AssignmentsResolver }},
                     // { path: 'assignments', component: AssignmentsComponent, resolve: {
                     //     users: UsersResolver, classes: ClassesResolver, assignments: AllAssignmentsResolver }},
 
@@ -115,24 +137,25 @@ import { CourseResolver } from '../resolvers/course.resolver';
     ],
     declarations: [
        AdminComponent,
-       ClassEditComponent,
-       CourseBuilderComponent,
-      CourseEditComponent,
-      MaterialEditComponent,
-      SeriesEditComponent,
-      EnrollmentEditComponent,
-       UserListComponent,
-       ContentComponent,
-       StudentsComponent,
-       InstructorsComponent,
-       ContentComponent,
-       EnrollmentsComponent,
-       AssignmentsComponent,
-       CourseObjectEditComponent,
-       SectionEditComponent,
+    //    ClassEditComponent,
+    //    CourseBuilderComponent,
+    //   CourseEditComponent,
+    //   MaterialEditComponent,
+    //   SeriesEditComponent,
+    //   EnrollmentEditComponent,
+    //    UserListComponent,
+    //    ContentComponent,
+    //    StudentsComponent,
+    //    InstructorsComponent,
+    //    ContentComponent,
+    //    EnrollmentsComponent,
+    //    AssignmentsComponent,
+    //    CourseObjectEditComponent,
+    //    SectionEditComponent,
        MaterialsAdminComponent,
        NewMaterialModalComponent,
-       MaterialLineItemComponent
+       MaterialLineItemComponent,
+
     ],
     providers: [
         AdminRouteActivator,
@@ -140,26 +163,40 @@ import { CourseResolver } from '../resolvers/course.resolver';
         UsersResolver,
         CourseResolver,
         SeriesResolver,
-        CourseEditGuard,
-        CourseObjectEditGuard,
-        MaterialEditGuard
+        // CourseEditGuard,
+        // CourseObjectEditGuard,
+        // MaterialEditGuard,
+        { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
     ],
     exports: [
         AdminComponent,
-        ClassEditComponent,
-        CourseBuilderComponent,
-        CourseEditComponent,
-        MaterialEditComponent,
-        SeriesEditComponent,
-        EnrollmentEditComponent,
-        UserListComponent,
-        CourseObjectEditComponent,
-        AssignmentsComponent,
-        SectionEditComponent,
+        // ClassEditComponent,
+        // CourseBuilderComponent,
+        // CourseEditComponent,
+        // MaterialEditComponent,
+        // SeriesEditComponent,
+        // EnrollmentEditComponent,
+        // UserListComponent,
+        // CourseObjectEditComponent,
+        // AssignmentsComponent,
+        // SectionEditComponent,
         MaterialsAdminComponent,
         NewMaterialModalComponent,
-        MaterialLineItemComponent
-    ]
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatExpansionModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatExpansionModule,
+        MatDialogModule,
+        MatFormFieldModule,
+        MatListModule,
+        FormsModule,
+    ],
+    schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 
 export class AdminFeatureModule { }

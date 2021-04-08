@@ -14,6 +14,7 @@ import { Materialtype } from '../../models/materialtype.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import _ from 'lodash';
 import { Location } from '@angular/common';
+import { MatFormField } from '@angular/material/form-field';
 
 @Component({
     //  moduleId: module.id,

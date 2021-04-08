@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../models/user.model';
 import { ClassModel } from '../models/classModel.model';
 import { CommonModule } from '@angular/common';
+import { BrowserModule } from '@angular/platform-browser';
 // import { UserService } from '../services/user.service';
 // import { ClassService } from '../services/class.service';
 import { Course } from '../models/course.model';

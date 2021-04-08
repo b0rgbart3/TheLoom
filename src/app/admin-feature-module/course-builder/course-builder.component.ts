@@ -6,6 +6,7 @@ import { Material } from '../../models/material.model';
 import { MaterialCollection } from '../../models/materialcollection.model';
 import { Router } from '@angular/router';
 import { Globals } from '../../globals2';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component ({
     templateUrl: './course-builder.component.html',

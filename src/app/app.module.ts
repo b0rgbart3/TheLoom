@@ -8,7 +8,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { WelcomeComponent } from '../app/welcome/welcome.component';
 import { MatMenuModule} from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-
+// import { StudentsComponent } from './admin-feature-module/admin/students.component';
 import { ClassService } from './services/class.service';
 import { CourseService } from './services/course.service';
 import { AssignmentsService } from './services/assignments.service';
@@ -61,6 +61,14 @@ import { BlockComponent } from './materials/block/block.component';
 import { DocComponent } from './materials/doc/doc.component';
 import { AudioComponent } from './materials/audio/audio.component';
 import { VideoComponent } from './materials/video/video.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { SeriesService } from './services/series.service';
+import { MatButtonModule } from '@angular/material/button';
+
+import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+
 
 // import { ClassThumbComponent } from './classes/class-list/class-thumb.component';
 // import { UserThumbComponent } from './users/user-thumb/user-thumb.component';
@@ -93,7 +101,17 @@ import { VideoComponent } from './materials/video/video.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     SharedModule,
+    AdminFeatureModule,
     AppRoutingModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatListModule,
     // Specify your library as an import
     // AlertModule.forRoot({maxMessages: 5, timeout: 5000, positionX: 'right'})
     ToastrModule.forRoot(), // ToastrModule added
@@ -113,6 +131,7 @@ import { VideoComponent } from './materials/video/video.component';
     AnnouncementsService,
     AnnouncementsResolver,
     AnnouncementsResolver,
+    SeriesService,
     UserService,
     UsersResolver,
     LoomNotificationsService,
@@ -125,6 +144,7 @@ import { VideoComponent } from './materials/video/video.component';
     DiscussionService,
     Globals,
     HttpCacheService,
+    MatExpansionModule,
     { provide: HTTP_INTERCEPTORS, useClass: CacheInterceptor, multi: true },
   ],
   schemas: [
@@ -132,8 +152,23 @@ import { VideoComponent } from './materials/video/video.component';
   ],
   exports: [
     BrowserModule,
-    CommonModule
+    CommonModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    AdminFeatureModule,
+    AppRoutingModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatListModule,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

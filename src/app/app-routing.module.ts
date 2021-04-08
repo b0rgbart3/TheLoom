@@ -118,7 +118,6 @@ const loomRoutes: Routes = [
   ],
   providers: [
     ClassService
-
   ],
   exports: [RouterModule]
 })

@@ -13,7 +13,7 @@
 
         <h1>Materials</h1>
 
-        <div class='wrapper' [dragula]='bagName' [dragulaModel]='section.materials'
+        <!-- <div class='wrapper' [dragula]='bagName' [dragulaModel]='section.materials'
         [dragulaOptions]='dragOptions'>
             <div *ngFor='let material of section.materials; let i = index' class='materialBox'>
                 <div>
@@ -23,7 +23,7 @@
                 <div class='edit' (click)='editMaterial(material)'></div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <br clear='all'><br>
         <div class='smallSquareButton' *ngFor='let material of materialTypes; let j=index' (click)='addMaterial(j)'>
             {{ material.pluralName }} </div>
@@ -37,5 +37,6 @@
     </div>
 </div>
 
+<!-- 
 <choice-modal [openModal]="openModal" (onChosen)='chose($event)' (addNew)='addNew($event)'></choice-modal>
-<new-material-modal [newMateriaModal]="newMaterialModal" (onComplete)='newMaterialAdded($event)'></new-material-modal>
+<new-material-modal [newMateriaModal]="newMaterialModal" (onComplete)='newMaterialAdded($event)'></new-material-modal> -->
